@@ -124,6 +124,7 @@ export default function Header() {
 
           <div className="space-y-4 text-lg font-semibold">
             <Link href="/" className="block text-white hover:text-[#f87171] transition" onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
+            <Link href="/product" className="block text-white hover:text-[#f87171] transition" onClick={() => setIsMobileMenuOpen(false)}>Product</Link>
             <Link href="/pricing" className="block text-white hover:text-[#f87171] transition" onClick={() => setIsMobileMenuOpen(false)}>Pricing</Link>
             <Link href="/contact-us" className="block text-white hover:text-[#f87171] transition" onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
             <Link href="/about-us" className="block text-white hover:text-[#f87171] transition" onClick={() => setIsMobileMenuOpen(false)}>About</Link>
