@@ -136,7 +136,7 @@ async function initializeDatabase() {
     console.log('   1. Start dev server: npm run dev');
     console.log('   2. Visit admin: http://localhost:3000/admin/login');
     console.log('   3. Use credentials:');
-    console.log('      Email: admin@autorevealed.com');
+    console.log('      Email: admin@carreaders.com');
     console.log('      Password: Admin123@Secure\n');
 
     process.exit(0);

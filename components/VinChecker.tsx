@@ -72,7 +72,7 @@ export default function VinChecker() {
             <div className="space-y-6 text-white">
 
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
-                AutoRevealed Vehicle Intelligence
+                Carreaders Vehicle Intelligence
               </h2>
 
               <p className="text-sm sm:text-base md:text-lg text-white/80">
@@ -155,7 +155,7 @@ export default function VinChecker() {
               </Button>
 
               <p className="text-xs text-gray-500 mt-3 text-center">
-                Powered by AutoRevealed Data Engine
+                Powered by Carreaders Data Engine
               </p>
 
             </div>

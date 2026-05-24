@@ -22,12 +22,12 @@ export default function RefundPolicyPageClient() {
 
           <section>
             <h2 className="text-2xl font-semibold text-gray-900">Introduction to the Services</h2>
-            <p className="mt-3">These Terms and Conditions ("Agreement") form a legally binding contract between you ("Buyer", "you", or "your"), <strong>Paddle</strong> (as defined below), and <strong>Allied Timber</strong> ("Supplier", "we", "our", or "us") and govern your use of the services provided via <strong>AutoRevealed.com</strong>.</p>
-            <p className="mt-3"><strong>Paddle is the Merchant of Record and authorised reseller</strong> of the Products offered by Allied Timber. This means that payments are processed by Paddle, but the Product is <strong>licensed and provided by Allied Timber</strong>.</p>
+            <p className="mt-3">These Terms and Conditions ("Agreement") form a legally binding contract between you ("Buyer", "you", or "your"), <strong>Paddle</strong> (as defined below), and <strong>Nexlify Labs LTD</strong> ("Supplier", "we", "our", or "us") and govern your use of the services provided via <strong>carreaders.com</strong>.</p>
+            <p className="mt-3"><strong>Paddle is the Merchant of Record and authorised reseller</strong> of the Products offered by Nexlify Labs LTD. This means that payments are processed by Paddle, but the Product is <strong>licensed and provided by Nexlify Labs LTD</strong>.</p>
             <p className="mt-3">By placing an order through Paddle, you agree to both:</p>
             <ul className="mt-3 space-y-2 list-disc list-inside">
               <li>These Terms & Conditions, and</li>
-              <li>The Supplier Agreement provided by Allied Timber</li>
+              <li>The Supplier Agreement provided by Nexlify Labs LTD</li>
             </ul>
           </section>
 
@@ -53,8 +53,8 @@ export default function RefundPolicyPageClient() {
                   {/* <li><strong>Rest of World:</strong> Paddle.com Market Limited, Judd House, 18-29 Mora Street, London EC1V 8BT, UK</li> */}
                 </ul>
               </li>
-              <li><strong>Product:</strong> Digital vehicle history reports and related services provided by Allied Timber</li>
-              <li><strong>Supplier:</strong> Allied Timber</li>
+              <li><strong>Product:</strong> Digital vehicle history reports and related services provided by Nexlify Labs LTD</li>
+              <li><strong>Supplier:</strong> Nexlify Labs LTD</li>
               <li><strong>Services:</strong> Online services enabling the purchase and delivery of Products via Paddle</li>
               <li><strong>Transaction:</strong> Purchase of a Product through the Services</li>
             </ul>
@@ -64,7 +64,7 @@ export default function RefundPolicyPageClient() {
             <h2 className="text-2xl font-semibold text-gray-900">Contract Formation</h2>
             <p className="mt-3">A contract is formed when:</p>
             <ol className="mt-3 space-y-2 list-decimal list-inside">
-              <li>You select a Product on AutoRevealed.com</li>
+              <li>You select a Product on carreaders.com</li>
               <li>You agree to the Supplier's terms</li>
               <li>Paddle issues an invoice or processes payment</li>
               <li>Payment is successfully completed and the Product is delivered</li>
@@ -73,7 +73,7 @@ export default function RefundPolicyPageClient() {
 
           <section>
             <h2 className="text-2xl font-semibold text-gray-900">Nature of the Product</h2>
-            <p className="mt-3">All Products provided by <strong>Allied Timber</strong> are <strong>digital vehicle information reports</strong> generated using third-party data sources. Reports are provided <strong>as-is</strong> and reflect information available at the time of generation.</p>
+            <p className="mt-3">All Products provided by <strong>Nexlify Labs LTD</strong> are <strong>digital vehicle information reports</strong> generated using third-party data sources. Reports are provided <strong>as-is</strong> and reflect information available at the time of generation.</p>
           </section>
 
           <section>
@@ -84,7 +84,7 @@ export default function RefundPolicyPageClient() {
               <li>Prices may change at any time without notice</li>
               <li>You agree to receive invoices and receipts electronically</li>
             </ul>
-            <p className="mt-3">Allied Timber is not responsible for delivery failure caused by incorrect customer information.</p>
+            <p className="mt-3">Nexlify Labs LTD is not responsible for delivery failure caused by incorrect customer information.</p>
           </section>
 
           <section>
@@ -130,7 +130,7 @@ export default function RefundPolicyPageClient() {
               <p className="mt-2">Provide the VIN or license plate number
                 Include your order number or transaction ID. Providing additional context is optional but can help us process your request faster.</p>
               {/* <ul className="mt-2 space-y-2 list-disc list-inside">
-                <li>Email: <a href="mailto:info@AutoRevealed.com" className="text-blue-600 hover:underline">info@AutoRevealed.com</a></li>
+                <li>Email: <a href="mailto:info@carreaders.com" className="text-blue-600 hover:underline">info@carreaders.com</a></li>
                 <li>Include your order number or transaction ID</li>
                 <li>Provide the VIN or license plate number used</li>
                 <li>Explain the reason for your refund request</li>
@@ -156,7 +156,7 @@ export default function RefundPolicyPageClient() {
             {/* 
             <div className="mt-6 ml-4">
               <h3 className="text-xl font-semibold text-gray-900">Partial Refunds</h3>
-              <p className="mt-2">In certain situations, Allied Timber may offer partial refunds at its discretion when:</p>
+              <p className="mt-2">In certain situations, Nexlify Labs LTD may offer partial refunds at its discretion when:</p>
               <ul className="mt-2 space-y-2 list-disc list-inside">
                 <li>The report contains some data but is incomplete</li>
                 <li>There was a minor technical issue causing inconvenience</li>
@@ -182,7 +182,7 @@ export default function RefundPolicyPageClient() {
 
           <section>
             <h2 className="text-2xl font-semibold text-gray-900">Limitation of Liability</h2>
-            <p className="mt-3">Allied Timber and Paddle shall not be liable for:</p>
+            <p className="mt-3">Nexlify Labs LTD and Paddle shall not be liable for:</p>
             <ul className="mt-3 space-y-2 list-disc list-inside">
               <li>Indirect or consequential damages</li>
               <li>Inaccurate third-party vehicle data</li>
@@ -193,7 +193,7 @@ export default function RefundPolicyPageClient() {
 
           <section>
             <h2 className="text-2xl font-semibold text-gray-900">Intellectual Property</h2>
-            <p className="mt-3">All content, reports, branding, and systems on AutoRevealed.com are the intellectual property of <strong>Allied Timber</strong> and may not be copied, resold, or redistributed.</p>
+            <p className="mt-3">All content, reports, branding, and systems on carreaders.com are the intellectual property of <strong>Nexlify Labs LTD</strong> and may not be copied, resold, or redistributed.</p>
           </section>
 
           <section>
@@ -217,17 +217,14 @@ export default function RefundPolicyPageClient() {
           <section>
             <h2 className="text-2xl font-semibold text-gray-900">Contact Information</h2>
             <div className="mt-4 bg-blue-50 p-4 rounded-lg border border-blue-200 space-y-2">
-              <p className="text-gray-700"><strong>Supplier:</strong> Allied Timber</p>
-              <p className="text-gray-700"><strong>Website:</strong> <a href="https://AutoRevealed.com" className="text-blue-600 hover:underline">https://AutoRevealed.com</a></p>
-              <p className="text-gray-700"><strong>Support:</strong> <a href="mailto:info@AutoRevealed.com" className="text-blue-600 hover:underline">info@AutoRevealed.com</a></p>
+              <p className="text-gray-700"><strong>Supplier:</strong> Nexlify Labs LTD</p>
+              <p className="text-gray-700"><strong>Website:</strong> <a href="https://carreaders.com" className="text-blue-600 hover:underline">https://carreaders.com</a></p>
+              <p className="text-gray-700"><strong>Support:</strong> <a href="mailto:info@carreaders.com" className="text-blue-600 hover:underline">info@carreaders.com</a></p>
               <p className="text-gray-700">We aim to respond within 24-48 hours during business days</p>
             </div>
           </section>
 
-          <section className="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
-            <p className="text-sm text-gray-700"><em>Last updated: January 2026. Allied Timber values customer satisfaction and is committed to resolving issues promptly and fairly.</em></p>
-          </section>
-
+        
         </div>
       </div>
     </div>

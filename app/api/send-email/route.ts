@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/mysql";
 import { getTranslationsForLang } from "@/lib/translations";
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "autorevealed@gmail.com";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "carreaders@gmail.com";
 
 function generateOrderNotificationEmail(data: any, lang = "en"): string {
   const t = getTranslationsForLang(lang);
@@ -54,7 +54,7 @@ function generatePaymentSuccessAdminEmail(data: any): string {
     <div style="font-family: sans-serif; max-width: 600px; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
       <h2 style="color: #22c55e;">Payment Successful! 🥳</h2>
       <p>Hello Admin,</p>
-      <p>A new payment has been received for a vehicle history report via <strong>AutoRevealed</strong>.</p>
+      <p>A new payment has been received for a vehicle history report via <strong>Carreaders</strong>.</p>
       
       <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-top: 20px;">
         <h3 style="margin-top: 0; color: #333; border-bottom: 2px solid #ddd; padding-bottom: 10px;">Payment Details:</h3>
@@ -66,7 +66,7 @@ function generatePaymentSuccessAdminEmail(data: any): string {
         <p style="margin: 8px 0;"><strong>VIN:</strong> ${data.vinNumber || data.identificationValue || "N/A"}</p>
       </div>
       
-      <p style="margin-top: 20px; color: #666; font-size: 14px;">The order has been marked as completed in the database for AutoRevealed.</p>
+      <p style="margin-top: 20px; color: #666; font-size: 14px;">The order has been marked as completed in the database for Carreaders.</p>
     </div>
   `;
 }
@@ -84,7 +84,7 @@ function generatePaymentSuccessCustomerEmail(data: any): string {
       </div>
       
       <p>If you have any questions, feel free to contact us.</p>
-      <p>Best Regards,<br/><strong>AutoRevealed</strong></p>
+      <p>Best Regards,<br/><strong>Carreaders</strong></p>
     </div>
   `;
 }

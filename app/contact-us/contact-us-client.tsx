@@ -13,13 +13,19 @@ const contactInfo = [
   {
     icon: Mail,
     title: 'Email',
-    details: ['info@AutoRevealed.com'],
+    details: ['info@carreaders.com'],
     gradient: 'from-[#780000] to-red-900'
+  },
+  {
+    icon: Phone,
+    title: 'Phone',
+    details: ['+447828760930'],
+    gradient: 'from-[#60a5fa] to-[#2a5aaa]'
   },
   {
     icon: MapPin,
     title: 'Office',
-    details: ['Office No 025-026 Naklath 286'],
+    details: ['SIU OFFICES, 4-6 GREATOREX STREET', 'LONDON UNITED KINGDOM', 'E1 5NF'],
     gradient: 'from-[#780000] to-black'
   }
 ]
@@ -100,7 +106,7 @@ export default function ContactUsClient() {
           </div>
 
           <h1 className="text-5xl sm:text-6xl xl:text-7xl font-black mt-6 text-white">
-            Contact <span style={{ color: '#f87171' }}>AutoRevealed</span>
+            Contact <span style={{ color: '#f87171' }}>Carreaders</span>
           </h1>
 
           <p className="mt-4 text-lg" style={{ color: 'rgba(186,220,255,0.6)' }}>
@@ -109,7 +115,7 @@ export default function ContactUsClient() {
         </div>
 
         {/* CONTACT CARDS */}
-        <div className="grid md:grid-cols-2 gap-6 mb-12">
+        <div className="grid md:grid-cols-3 gap-6 mb-12">
           {contactInfo.map((item, i) => (
             <div
               key={i}
@@ -132,7 +138,11 @@ export default function ContactUsClient() {
 
               {item.details.map((d, idx) => (
                 <p key={idx} className="text-sm mt-1" style={{ color: 'rgba(255,255,255,0.6)' }}>
-                  {d}
+                  {d && typeof d === 'string' && d.startsWith('+') ? (
+                    <a href={`tel:${d}`} className="underline" style={{ color: 'rgba(255,255,255,0.85)' }}>{d}</a>
+                  ) : (
+                    d
+                  )}
                 </p>
               ))}
             </div>

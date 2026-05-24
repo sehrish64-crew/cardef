@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     console.log('✓ Checking against env credentials');
 
     // Match with environment-based credentials
-    if ((username === envAdminEmail || username === 'admin@autorevealed.com') && password === envAdminPass) {
+    if ((username === envAdminEmail || username === 'admin@carreaders.com') && password === envAdminPass) {
       console.log('✅ SUCCESS: Environment credentials matched!');
       const token = generateToken(username)
       return NextResponse.json({ token, success: true })

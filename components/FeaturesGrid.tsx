@@ -55,7 +55,7 @@ export default function FeaturesGrid() {
           </h2>
 
           <p className="text-sm sm:text-base lg:text-lg text-white/70 leading-relaxed">
-            Instantly uncover hidden issues, ownership records, mileage accuracy, and accident history with AutoRevealed.
+            Instantly uncover hidden issues, ownership records, mileage accuracy, and accident history with Carreaders.
           </p>
         </div>
 
@@ -246,7 +246,7 @@ export default function FeaturesGrid() {
           <div>
             <h4 className="font-bold text-white">Official NMVTIS Source</h4>
             <p className="text-white/70 text-sm">
-              AutoRevealed is an approved NMVTIS provider helping prevent fraud and unsafe vehicle purchases.
+              Carreaders is an approved NMVTIS provider helping prevent fraud and unsafe vehicle purchases.
             </p>
           </div>
         </div>

@@ -42,7 +42,7 @@ try {
 const PORT = process.env.PORT || 3000;
 const NODE_ENV = process.env.NODE_ENV || 'production';
 
-console.log(`Starting AutoRevealed Next.js Server`);
+console.log(`Starting Carreaders Next.js Server`);
 console.log(`Environment: ${NODE_ENV}`);
 console.log(`Port: ${PORT}`);
 console.log('-------------------------------------------\n');

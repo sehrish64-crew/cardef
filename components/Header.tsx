@@ -38,7 +38,7 @@ export default function Header() {
 
             {/* LOGO */}
             <Link href="/" className="flex items-center gap-2">
-              <img src="/logo.png" alt="AutoRevealed" className="h-9 sm:h-10 w-auto" />
+              <img src="/logo.png" alt="Carreaders" className="h-9 sm:h-10 w-auto" />
             </Link>
 
             {/* NAV */}

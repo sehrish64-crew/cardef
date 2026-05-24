@@ -21,7 +21,7 @@ async function testReviewForm() {
     console.log('📝 Test 1: Inserting a new review...');
     const [result] = await conn.execute(
       `INSERT INTO reviews (name, email, rating, comment, status) VALUES (?, ?, ?, ?, ?)`,
-      ['John Doe', 'john@example.com', 5, 'Excellent service! Highly recommend AutoRevealed.', 'pending']
+      ['John Doe', 'john@example.com', 5, 'Excellent service! Highly recommend Carreaders.', 'pending']
     );
 
     const reviewId = result.insertId;

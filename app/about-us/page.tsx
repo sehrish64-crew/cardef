@@ -2,14 +2,14 @@ import { Metadata } from 'next'
 import AboutUsClient from './about-us-client'
 
 export const metadata: Metadata = {
-  title: 'About AutoRevealed - Vehicle History Transparency',
+  title: 'About Carreaders - Vehicle History Transparency',
   description:
-    'Learn how AutoRevealed is driving transparency in the automotive industry with blockchain-powered vehicle history reports from 900+ global databases.',
+    'Learn how Carreaders is driving transparency in the automotive industry with blockchain-powered vehicle history reports from 900+ global databases.',
   openGraph: {
-    title: 'About AutoRevealed - Vehicle History Transparency',
+    title: 'About Carreaders - Vehicle History Transparency',
     description:
-      'Learn how AutoRevealed is driving transparency in the automotive industry with blockchain-powered vehicle history reports from 900+ global databases.',
-    url: 'https://autorevealed.com/about-us',
+      'Learn how Carreaders is driving transparency in the automotive industry with blockchain-powered vehicle history reports from 900+ global databases.',
+    url: 'https://carreaders.com/about-us',
     type: 'website',
   },
 }

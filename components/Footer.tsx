@@ -24,7 +24,7 @@ export default function Footer() {
   const [hoveredSocial, setHoveredSocial] = useState<string | null>(null)
 
   return (
-    <footer 
+    <footer
       className="relative overflow-hidden text-white"
       style={{ background: 'linear-gradient(135deg, #0a0f1e 0%, #0d1b2e 40%, #0a1628 100%)' }}
     >
@@ -42,36 +42,53 @@ export default function Footer() {
       <div className="relative max-w-7xl mx-auto px-6 py-12">
 
         {/* TEXT */}
-        <div className="border-b border-white/10 pb-6 text-center">
-          <p className="text-[11px] sm:text-xs md:text-sm" style={{ color: 'rgba(255,255,255,0.6)' }} >
+        <div className="border-b border-white/10 pb-6">
+          <div className="max-w-4xl mx-auto text-center">
+            <p className="text-[11px] sm:text-xs md:text-sm mb-3" style={{ color: 'rgba(255,255,255,0.6)' }}>
+              Nexlify Labs LTD VIN Reports. All Rights Reserved. {new Date().getFullYear()} © Carreaders. Use of this Website constitutes acceptance of{' '}
 
-            <span className="block mb-2">
-              Allied Timber VIN Reports. All Rights Reserved. {new Date().getFullYear()} © AutoRevealed. Use of this Website constitutes acceptance of{' '}
-            </span>
+            </p>
 
-            <Link href="/terms" className="transition" style={{ color: 'rgba(255,255,255,0.8)' }}>
-             <u> Terms & Conditions</u>
-            </Link>
-            {' , '}
-            <Link href="/privacy" className="transition" style={{ color: 'rgba(255,255,255,0.8)' }}>
-             <u> Privacy Policy</u>
-            </Link>
-            {' , '}
-            <Link href="/refund-policy" className="transition" style={{ color: 'rgba(255,255,255,0.8)' }}>
-             <u> Refund Policy</u>
-            </Link>
+            <p className="text-xs sm:text-sm md:text-sm text-white/80 mb-4">
+              This site is owned and operated by Nexlify Labs LTD - an approved NMVTIS data provider. Email: <a href="mailto:Info@carreaders.com" className="underline">Info@carreaders.com</a>
+            </p>
 
-            <span className="block mt-2">
-              This site is owned and operated by Allied Timber - an approved NMVTIS data provider.
-              <span className="text-white"> Email: Info@autorevealed.com</span>
-            </span>
+            {/* Contact row: phone (WhatsApp) + address + social icons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
+              <div className="flex items-center gap-3 text-white/90">
+                {/* WhatsApp link */}
 
-          </p>
+              </div>
+
+              <div className="text-sm text-white/70 text-center sm:text-left">
+                SIU OFFICES, 4-6 GREATOREX STREET LONDON UNITED KINGDOM E1 5NF
+              </div>
+              <div>
+
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* PAYMENT */}
+
+       <div>
+         <div className='text-center mt-5'>
+          <Link href="/terms" className="transition" style={{ color: 'rgba(255,255,255,0.8)' }}>
+            <u>Terms & Conditions</u>
+          </Link>
+          {', '}
+          <Link href="/privacy" className="transition" style={{ color: 'rgba(255,255,255,0.8)' }}>
+            <u>Privacy Policy</u>
+          </Link>
+          {', '}
+          <Link href="/refund-policy" className="transition" style={{ color: 'rgba(255,255,255,0.8)' }}>
+            <u>Refund Policy</u>
+          </Link>
+        </div>
         <div className="flex justify-center mt-6">
-          <div 
+
+          <div
             className="flex items-center gap-6 px-6 py-3 rounded-2xl backdrop-blur-md border"
             style={{
               background: 'rgba(255,255,255,0.05)',
@@ -86,6 +103,7 @@ export default function Footer() {
 
           </div>
         </div>
+       </div>
 
       </div>
 

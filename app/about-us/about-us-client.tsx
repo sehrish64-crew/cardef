@@ -94,7 +94,7 @@ export default function AboutUsClient() {
             className="inline-flex items-center gap-2 px-5 py-2 rounded-full font-semibold border"
             style={{ borderColor: 'rgba(120,0,0,0.5)', background: 'rgba(120,0,0,0.12)', color: '#f87171' }}
           >
-            <Shield size={16} /> About AutoRevealed
+            <Shield size={16} /> About Carreaders
           </span>
 
           <h1 className="text-5xl sm:text-6xl xl:text-7xl font-black mt-6 leading-tight text-white">
@@ -102,7 +102,7 @@ export default function AboutUsClient() {
           </h1>
 
           <p className="mt-5 text-lg" style={{ color: 'rgba(186,220,255,0.6)' }}>
-            AutoRevealed is a digital vehicle history platform built to help people make safer,
+            Carreaders is a digital vehicle history platform built to help people make safer,
             smarter, and more transparent car buying decisions.
           </p>
 
@@ -146,12 +146,12 @@ export default function AboutUsClient() {
           <div className="space-y-5">
 
             <h2 className="text-4xl md:text-5xl font-bold text-white">
-              Why We Built <span style={{ color: '#f87171' }}>AutoRevealed</span>
+              Why We Built <span style={{ color: '#f87171' }}>Carreaders</span>
             </h2>
 
             <p className="leading-relaxed" style={{ color: 'rgba(255,255,255,0.7)' }}>
               Buying a used car can be risky. Hidden accidents, mileage fraud, and incomplete history
-              often lead to financial loss. We created AutoRevealed to solve this problem.
+              often lead to financial loss. We created Carreaders to solve this problem.
             </p>
 
             <p style={{ color: 'rgba(255,255,255,0.7)' }}>

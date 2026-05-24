@@ -38,7 +38,7 @@ const dbConfig = {
   port: parseInt(envVars.DB_PORT || '3306'),
   user: envVars.DB_USER || 'root',
   password: envVars.DB_PASSWORD || '',
-  database: envVars.DB_NAME || 'autorevealed',
+  database: envVars.DB_NAME || 'carreaders',
   connectTimeout: 10000,
 };
 

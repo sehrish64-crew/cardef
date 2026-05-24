@@ -146,7 +146,7 @@ export async function POST(request: NextRequest) {
       reportMetadata: {
         reportDate: new Date().toISOString(),
         reportId: `REPORT_${cleanVin}_${Date.now()}`,
-        dataSource: 'AutoRevealedVIN Decoder API',
+        dataSource: 'Carreaders VIN Decoder API',
       }
     }
 

@@ -56,7 +56,7 @@
   "payment_complete": "Complete your payment",
 
   "features_title": "We check what sellers won't tell you",
-  "features_subtitle": "AutoRevealed scans over a billion verified records to help you lower the risk of buying a used car – in just 55 seconds.",
+  "features_subtitle": "Carreaders scans over a billion verified records to help you lower the risk of buying a used car – in just 55 seconds.",
   "feature_spot_damage_title": "Spot damage and write-offs",
   "feature_spot_damage_desc": "We check over 300 million records to show you where and when the damage occurred, and what the repairs might have cost (if that data is available).",
   "feature_verify_mileage_title": "Verify actual mileage",
@@ -72,8 +72,8 @@
   "feature_disasters_title": "Check for weather-related damage",
   "feature_disasters_desc": "Our Natural Disasters data flags cars that may have been exposed to floods, storms, or other natural events – even if the damage is not visible.",
 
-  "why_title": "Why smart buyers always start with AutoRevealed",
-  "why_subtitle": "An AutoRevealed vehicle history report helps you make confident decisions by showing what’s worth buying, what’s not, and where you can get the best value.",
+  "why_title": "Why smart buyers always start with Carreaders",
+  "why_subtitle": "An Carreaders vehicle history report helps you make confident decisions by showing what’s worth buying, what’s not, and where you can get the best value.",
   "why_section1_title": "Save yourself from costly surprises",
   "why_section1_desc": "Spot hidden damage, rolled-back mileage, and other serious issues before you buy — so you don’t end up paying for someone else’s problems.",
   "why_section2_title": "Choose the right car in less time",
@@ -148,7 +148,7 @@
   "email_review_subject": "New Review",
 
   "testimonials_title": "Hear from real car buyers like you",
-  "testimonials_subtitle": "See why users trust AutoRevealed to make smarter and safer vehicle decisions.",
+  "testimonials_subtitle": "See why users trust Carreaders to make smarter and safer vehicle decisions.",
   "testimonials_add_review": "Write a Review",
   "testimonials_trusted_title": "Trusted by millions of users worldwide",
   "testimonials_trusted_subtitle": "Join thousands of satisfied customers who make confident car buying decisions",
@@ -204,7 +204,7 @@
   "refund_contact_title": "Contact",
   "refund_contact_paragraph": "For refund requests, please use the contact form or email our support team with the order number and issue.",
 
-  "copyright": "© {{year}} AutoRevealed. All rights reserved.",
+  "copyright": "© {{year}} Carreaders. All rights reserved.",
 
   "review_name_label": "Your Name",
   "review_name_placeholder": "John Doe",
@@ -234,7 +234,7 @@
   "howitworks_step3_desc": "After payment, you can instantly access your full vehicle history report. Your report is typically ready within 2 hours.",
   "howitworks_step3_link": "How can I buy and use credits?",
   "howitworks_step4_title": "Make confident decisions with real data",
-  "howitworks_step4_desc": "Use your AutoRevealed vehicle history report to decide whether to buy, negotiate a better price, or continue searching.",
+  "howitworks_step4_desc": "Use your Carreaders vehicle history report to decide whether to buy, negotiate a better price, or continue searching.",
   "howitworks_step4_link": "View sample report",
   "howitworks_cta": "Get Your Vehicle Report Now",
 

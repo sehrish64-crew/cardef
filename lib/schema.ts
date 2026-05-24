@@ -2,9 +2,9 @@ export function getOrganizationSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'AutoRevealed',
-    url: 'https://autorevealed.com',
-    logo: 'https://autorevealed.com/favicon.ico',
+    name: 'Carreaders',
+    url: 'https://carreaders.com',
+    logo: 'https://carreaders.com/favicon.ico',
     description: "Trust data, not words. Check any car's history in seconds",
     sameAs: [],
     contactPoint: {
@@ -19,10 +19,10 @@ export function getLocalBusinessSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
-    name: 'AutoRevealed',
+    name: 'Carreaders',
     description: "Trust data, not words. Check any car's history in seconds",
-    image: 'https://autorevealed.com/favicon.ico',
-    url: 'https://autorevealed.com',
+    image: 'https://carreaders.com/favicon.ico',
+    url: 'https://carreaders.com',
     priceRange: '$$',
     areaServed: {
       '@type': 'Country',
@@ -40,7 +40,7 @@ export function getProductSchema() {
     description: "Complete vehicle history check from 900+ global databases",
     brand: {
       '@type': 'Brand',
-      name: 'AutoRevealed',
+      name: 'Carreaders',
     },
     offers: {
       '@type': 'AggregateOffer',
@@ -78,11 +78,11 @@ export function getArticleSchema(article: {
     '@type': 'Article',
     headline: article.title,
     description: article.description,
-    image: article.image || 'https://autorevealed.com/favicon.ico',
+    image: article.image || 'https://carreaders.com/favicon.ico',
     datePublished: article.datePublished || new Date().toISOString(),
     author: {
       '@type': 'Organization',
-      name: article.author || 'AutoRevealed',
+      name: article.author || 'Carreaders',
     },
   };
 }

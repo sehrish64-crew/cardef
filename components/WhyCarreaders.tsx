@@ -16,7 +16,7 @@ import { useTranslations } from '@/lib/translations'
 
 SwiperCore.use([Navigation, Autoplay]);
 
-export default function WhyAutoRevealed() {
+export default function WhyCarreaders() {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
   const { t } = useTranslations()

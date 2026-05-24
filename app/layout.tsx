@@ -5,6 +5,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import LayoutWrapper from '@/components/LayoutWrapper';
 import Script from 'next/script';
+import WhatsAppFab from '@/components/WhatsAppFab';
 // PaddleInit moved out of global layout so it doesn't render on all pages (e.g. Pricing).
 // Keep Paddle script in head and mount PaddleInit only on the dedicated checkout page.
 import { getOrganizationSchema } from '@/lib/schema';
@@ -56,7 +57,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const tmap = getTranslationsForLang(lang)
 
   return {
-    title: `AutoRevealed- ${tmap['banner_title'] || "Check any car's history"}`,
+    title: `Carreaders- ${tmap['banner_title'] || "Check any car's history"}`,
     keywords: ['car history', 'vehicle report', 'VIN check', 'used car', 'vehicle history check', 'car background check'],
     authors: [{ name: 'AutoFactsCheck' }],
     creator: 'AutoFactsCheck',
@@ -70,7 +71,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       type: 'website',
       url: 'https://autofactscheck.com',
-      title: `AutoRevealed- ${tmap['banner_title'] || "Check any car's history"}`,
+      title: `Carreaders- ${tmap['banner_title'] || "Check any car's history"}`,
       siteName: 'AutoFactsCheck',
       images: [
         { url: 'https://autofactscheck.com/banner-hero.png', width: 1200, height: 630 },
@@ -78,7 +79,7 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     twitter: {
       card: 'summary_large_image',
-      title: `AutoRevealed - ${tmap['banner_title'] || "Check any car's history"}`,
+      title: `Carreaders - ${tmap['banner_title'] || "Check any car's history"}`,
       description: tmap['banner_subtitle'] || "VIN Check Can Save You Thousands — Get a Full Vehicle History Report",
       images: [
         { url: 'https://autofactscheck.com/banner-hero.png' },
@@ -111,6 +112,7 @@ export default function RootLayout({
       <body suppressHydrationWarning className={inter.className} style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
         <LayoutWrapper>
           <main>{children}</main>
+          <WhatsAppFab />
         </LayoutWrapper>
       </body>
     </html>
