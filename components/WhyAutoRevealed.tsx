@@ -26,21 +26,30 @@ export default function WhyAutoRevealed() {
   }, [])
 
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-b from-slate-50 via-white to-red-50 overflow-hidden">
-      <div className="container mx-auto px-6">
+    <section
+      className="relative py-16 md:py-24 overflow-hidden"
+      style={{
+        backgroundImage:
+          'radial-gradient(circle at top left, rgba(120,0,0,0.16), transparent 30%), radial-gradient(circle at bottom right, rgba(42,90,170,0.16), transparent 38%), linear-gradient(135deg, #0a0f1e 0%, #0d1b2e 40%, #0a1628 100%)',
+      }}
+    >
+      <div className="absolute inset-0 opacity-35 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.06),_transparent_44%)]" />
+      <div className="absolute inset-0 opacity-25 bg-[radial-gradient(circle_at_bottom_right,_rgba(10,142,255,0.08),_transparent_50%)]" />
+
+      <div className="container mx-auto px-6 relative z-10">
 
         {/* HEADER */}
         <div className="text-center max-w-4xl mx-auto mb-16">
-          <h2 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
             {t('why_title')}
           </h2>
-          <p className="text-xs sm:text-sm md:text-base lg:text-xl text-gray-600 leading-relaxed">
+          <p className="text-xs sm:text-sm md:text-base lg:text-xl text-white/70 leading-relaxed">
             {t('why_subtitle')}
           </p>
         </div>
 
         {/* HERO IMAGE */}
-        <div className="relative h-80 sm:h-96 md:h-[500px] rounded-3xl overflow-hidden mb-16 shadow-2xl">
+        <div className="relative h-80 sm:h-96 md:h-[500px] rounded-3xl overflow-hidden mb-16 shadow-2xl border border-white/10 bg-white/5">
           <Image
             src="/cars.webp"
             alt={t('why_title')}
@@ -49,9 +58,8 @@ export default function WhyAutoRevealed() {
             priority
           />
 
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-[#780000]/40"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-[#1a3a6e]/35"></div>
 
-          {/* CONTENT */}
           <div className={`absolute inset-0 flex items-center justify-start transition-all duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
             <div className="px-6 md:px-12 max-w-lg space-y-6">
 
@@ -59,7 +67,7 @@ export default function WhyAutoRevealed() {
                 <div className="text-3xl md:text-5xl font-bold text-white">
                   Starting from
                 </div>
-                <div className="text-4xl md:text-6xl font-bold text-[#780000] drop-shadow-lg">
+                <div className="text-4xl md:text-6xl font-bold text-[#60a5fa] drop-shadow-lg">
                   $40
                 </div>
               </div>
@@ -75,7 +83,7 @@ export default function WhyAutoRevealed() {
 
               <button
                 onClick={() => setIsFormOpen(true)}
-                className="px-6 py-3 bg-gradient-to-r from-[#780000] to-red-700 text-white font-bold rounded-xl shadow-lg hover:scale-105 transition-all duration-300"
+                className="px-6 py-3 bg-gradient-to-r from-[#780000] to-[#9b111e] text-white font-bold rounded-xl shadow-lg shadow-[#780000]/25 hover:scale-105 transition-all duration-300"
               >
                 Check VIN Now
               </button>
@@ -89,31 +97,31 @@ export default function WhyAutoRevealed() {
 
           {[
             {
-              title: "Verification Method",
-              value: "By VIN & Plate",
-              icon: "✓",
-              color: "#780000"
+              title: 'Verification Method',
+              value: 'By VIN & Plate',
+              icon: '✓',
+              color: '#780000',
             },
             {
-              title: "Daily Searches",
-              value: "45K+",
-              icon: "↗",
-              color: "#9b111e"
+              title: 'Daily Searches',
+              value: '45K+',
+              icon: '↗',
+              color: '#60a5fa',
             },
             {
-              title: "Data Sources",
-              value: "70+",
-              icon: "⊕",
-              color: "#c1121f"
+              title: 'Data Sources',
+              value: '70+',
+              icon: '⊕',
+              color: '#2a5aaa',
             },
             {
-              title: "Report Scope",
-              value: "Complete History",
-              icon: "◆",
-              color: "#780000"
-            }
+              title: 'Report Scope',
+              value: 'Complete History',
+              icon: '◆',
+              color: '#780000',
+            },
           ].map((item, i) => (
-            <div key={i} className="bg-white rounded-2xl p-6 shadow-lg hover:-translate-y-2 transition-all border border-red-100">
+            <div key={i} className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-[0_25px_60px_rgba(0,0,0,0.2)] hover:-translate-y-2 transition-all">
 
               <div
                 className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold mb-4"
@@ -122,17 +130,17 @@ export default function WhyAutoRevealed() {
                 {item.icon}
               </div>
 
-              <p className="text-xs text-gray-500 uppercase">{item.title}</p>
-              <p className="text-xl font-bold text-gray-900 mt-2">{item.value}</p>
+              <p className="text-xs text-white/70 uppercase">{item.title}</p>
+              <p className="text-xl font-bold text-white mt-2">{item.value}</p>
             </div>
           ))}
 
         </div>
 
         {/* TRUST SECTION */}
-        <div className="mt-20 rounded-3xl overflow-hidden relative">
+        <div className="mt-20 rounded-3xl overflow-hidden relative border border-white/10 bg-white/5 shadow-[0_40px_90px_rgba(0,0,0,0.25)]">
 
-          <div className="absolute inset-0 bg-gradient-to-r from-[#780000] via-red-800 to-black"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#780000] via-[#1a3a6e] to-black"></div>
 
           <div className="relative p-10 md:p-16 text-white grid md:grid-cols-2 gap-10">
 

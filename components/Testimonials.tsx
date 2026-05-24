@@ -75,27 +75,33 @@ export default function Testimonials() {
   return (
     <section
       ref={sectionRef}
-      className="relative py-20 md:py-28 bg-gradient-to-br from-[#780000]/10 via-white to-[#780000]/20 overflow-hidden"
+      className="relative py-20 md:py-28 overflow-hidden"
+      style={{
+        backgroundImage:
+          'radial-gradient(circle at top left, rgba(120,0,0,0.16), transparent 28%), radial-gradient(circle at bottom right, rgba(42,90,170,0.16), transparent 36%), linear-gradient(135deg, #0a0f1e 0%, #0d1b2e 40%, #0a1628 100%)',
+      }}
     >
-      <div className="absolute top-10 left-10 w-72 h-72 bg-[#780000] rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-      <div className="absolute top-10 right-10 w-72 h-72 bg-[#780000] rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-      <div className="absolute bottom-10 left-1/2 w-72 h-72 bg-[#780000] rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+      <div className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.06),_transparent_40%)]" />
+      <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_bottom_right,_rgba(10,142,255,0.1),_transparent_50%)]" />
+      <div className="absolute top-14 left-10 w-72 h-72 bg-[#780000]/20 rounded-full blur-3xl" />
+      <div className="absolute top-10 right-10 w-72 h-72 bg-[#1a4a8a]/20 rounded-full blur-3xl" />
+      <div className="absolute bottom-10 left-1/2 w-72 h-72 bg-[#780000]/10 rounded-full blur-3xl" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* HEADER */}
         <div className={`text-center mb-12 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}>
-          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
             {t('testimonials_title')}
           </h2>
-          <p className="text-gray-700 text-lg mb-6">
+          <p className="text-white/75 text-lg mb-6">
             {t('testimonials_subtitle')}
           </p>
 
-          <Button 
+          <Button
             onClick={() => setIsReviewFormOpen(true)}
-            className="bg-[#780000] hover:bg-red-900 text-white px-8 py-6 text-lg"
+            className="bg-gradient-to-r from-[#780000] to-[#9b111e] text-white px-8 py-6 text-lg shadow-lg shadow-[#780000]/25"
           >
             {t('testimonials_add_review')}
           </Button>
@@ -113,9 +119,7 @@ export default function Testimonials() {
             className="w-full h-full object-cover"
           />
 
-          {/* LIGHTER GRADIENT (FIXED) */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#780000]/60 via-[#780000]/30 to-transparent flex items-center">
-
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0a0f1e]/90 via-[#1a3a6e]/40 to-transparent flex items-center">
             <div className="max-w-xl px-12">
 
               <h3 className="text-3xl font-bold text-white mb-4">
@@ -127,10 +131,9 @@ export default function Testimonials() {
               </p>
 
               <div className="flex items-center gap-6">
-
                 <div className="flex -space-x-3">
                   {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="w-12 h-12 rounded-full bg-[#780000] border-4 border-white flex items-center justify-center">
+                    <div key={i} className="w-12 h-12 rounded-full bg-[#1a3a6e] border-4 border-white/20 flex items-center justify-center">
                       <User className="w-6 h-6 text-white" />
                     </div>
                   ))}
@@ -142,11 +145,9 @@ export default function Testimonials() {
                     {t('testimonials_reports_generated')}
                   </p>
                 </div>
-
               </div>
 
             </div>
-
           </div>
 
         </div>

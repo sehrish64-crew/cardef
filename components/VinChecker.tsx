@@ -44,21 +44,27 @@ export default function VinChecker() {
   return (
     <section
       ref={sectionRef}
-      className="relative py-16 md:py-20 px-4 bg-gradient-to-br from-[#780000]/10 via-white to-[#780000]/5 overflow-hidden"
+      className="relative py-16 md:py-20 overflow-hidden"
+      style={{
+        backgroundImage:
+          'radial-gradient(circle at top left, rgba(120,0,0,0.16), transparent 30%), radial-gradient(circle at bottom right, rgba(42,90,170,0.16), transparent 40%), linear-gradient(135deg, #0a0f1e 0%, #0d1b2e 40%, #0a1628 100%)',
+      }}
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="absolute inset-0 opacity-30 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.06),_transparent_45%)]" />
+      <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_bottom_right,_rgba(10,142,255,0.08),_transparent_50%)]" />
+
+      <div className="max-w-6xl mx-auto relative z-10 px-4">
 
         <div
-          className={`relative bg-gradient-to-br from-[#780000] via-[#8a0000] to-[#5a0000] rounded-3xl overflow-hidden shadow-2xl transform transition-all duration-1000 ${
+          className={`relative rounded-3xl overflow-hidden shadow-2xl transform transition-all duration-1000 border border-white/10 bg-white/5 ${
             isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
           }`}
         >
 
           {/* Background glow */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-[#780000]/40 via-transparent to-black/20"></div>
-
-          <div className="absolute top-0 right-0 w-96 h-96 bg-[#780000]/30 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-black/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute inset-0 bg-gradient-to-tr from-[#780000]/35 via-transparent to-black/25"></div>
+          <div className="absolute top-0 right-0 w-96 h-96 bg-[#780000]/25 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#1a3a6e]/20 rounded-full blur-3xl" />
 
           <div className="relative px-6 md:px-12 lg:px-16 py-12 md:py-16 grid lg:grid-cols-2 gap-8 items-center">
 
@@ -69,12 +75,12 @@ export default function VinChecker() {
                 AutoRevealed Vehicle Intelligence
               </h2>
 
-              <p className="text-sm sm:text-base md:text-lg text-white/90">
+              <p className="text-sm sm:text-base md:text-lg text-white/80">
                 Instantly uncover accident history, mileage records, ownership changes, and hidden issues before buying any car.
               </p>
 
-              <div className="flex items-center space-x-2 text-white/90">
-                <CheckCircle className="w-5 h-5" />
+              <div className="flex items-center space-x-2 text-white/80">
+                <CheckCircle className="w-5 h-5 text-[#f87171]" />
                 <span className="text-sm md:text-base">
                   Trusted by 4.5M+ users across 35+ countries
                 </span>
@@ -96,35 +102,31 @@ export default function VinChecker() {
             </div>
 
             {/* RIGHT SIDE */}
-            <div className="bg-white rounded-2xl shadow-2xl p-5">
+            <div className="bg-[#0f1628] border border-white/10 rounded-3xl shadow-2xl p-6 md:p-8">
 
               {/* Toggle */}
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex bg-gray-100 p-1 rounded-full">
+              <div className="flex items-center justify-between mb-4 bg-white/5 p-1 rounded-full border border-white/10">
+                <button
+                  onClick={() => setVehicleIdType('vin')}
+                  className={`px-3 py-1 rounded-full text-sm font-medium transition ${
+                    vehicleIdType === 'vin'
+                      ? 'bg-[#780000] text-white'
+                      : 'text-white/70 hover:text-white'
+                  }`}
+                >
+                  By VIN
+                </button>
 
-                  <button
-                    onClick={() => setVehicleIdType('vin')}
-                    className={`px-3 py-1 rounded-full text-sm font-medium transition ${
-                      vehicleIdType === 'vin'
-                        ? 'bg-[#780000] text-white'
-                        : 'text-black'
-                    }`}
-                  >
-                    By VIN
-                  </button>
-
-                  <button
-                    onClick={() => setVehicleIdType('plate')}
-                    className={`px-3 py-1 rounded-full text-sm font-medium transition ${
-                      vehicleIdType === 'plate'
-                        ? 'bg-[#780000] text-white'
-                        : 'text-black'
-                    }`}
-                  >
-                    Plate
-                  </button>
-
-                </div>
+                <button
+                  onClick={() => setVehicleIdType('plate')}
+                  className={`px-3 py-1 rounded-full text-sm font-medium transition ${
+                    vehicleIdType === 'plate'
+                      ? 'bg-[#780000] text-white'
+                      : 'text-white/70 hover:text-white'
+                  }`}
+                >
+                  Plate
+                </button>
               </div>
 
               {/* INPUT */}
@@ -133,21 +135,21 @@ export default function VinChecker() {
                   placeholder="Enter VIN Number"
                   value={vin}
                   onChange={(e) => setVin(e.target.value.toUpperCase())}
-                  className="text-lg py-6"
+                  className="text-lg py-6 bg-white/10 border border-white/20 text-white placeholder:text-white/50"
                 />
               ) : (
                 <Input
                   placeholder="Enter Plate Number"
                   value={plate}
                   onChange={(e) => setPlate(e.target.value.toUpperCase())}
-                  className="text-lg py-6"
+                  className="text-lg py-6 bg-white/10 border border-white/20 text-white placeholder:text-white/50"
                 />
               )}
 
               {/* BUTTON */}
               <Button
                 onClick={() => setIsFormOpen(true)}
-                className="w-full mt-4 bg-[#780000] hover:bg-[#5a0000] text-white font-bold py-3"
+                className="w-full mt-4 bg-gradient-to-r from-[#780000] to-[#9b111e] text-white font-bold py-3 shadow-lg shadow-[#780000]/20"
               >
                 Get Free Report
               </Button>

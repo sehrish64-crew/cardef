@@ -1,17 +1,11 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
-import { X, HelpCircle, Key, Hash } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { useState, useEffect } from 'react'
+import { X, Key, Hash, HelpCircle, ChevronRight, Shield, Mail, Car, AlertCircle } from 'lucide-react'
 import { useCountry } from '@/contexts/CountryContext'
 import countriesList from '@/lib/countries'
-import { Input as TextInput } from '@/components/ui/input'
 import { useTranslations } from '@/lib/translations'
-import { parseJsonSafe } from '@/lib/utils'
-import { getPrice, formatCurrency, getExternalPriceId, getPaddlePriceId } from '@/lib/prices'
+import { getPrice, formatCurrency, getPaddlePriceId } from '@/lib/prices'
 
 interface GetReportFormProps {
   isOpen: boolean
@@ -23,13 +17,21 @@ interface GetReportFormProps {
 
 const vehicleTypes = ['Car', 'Motorcycle', 'Truck', 'Boat', 'ATV', 'Campervan']
 const packages = [
-  { id: 'basic', name: 'Basic Report' },
-  { id: 'standard', name: 'Standard Report' },
-  { id: 'premium', name: 'Premium Report' },
+  { id: 'basic', name: 'Basic', desc: 'Core vehicle specs & title check' },
+  { id: 'standard', name: 'Standard', desc: 'Full history + accident records' },
+  { id: 'premium', name: 'Premium', desc: 'Everything + market value & theft' },
 ]
 
-export default function GetReportForm({ isOpen, onClose, preselectedPackage, prefilledIdentType, prefilledIdentValue }: GetReportFormProps) {
+export default function GetReportForm({
+  isOpen,
+  onClose,
+  preselectedPackage,
+  prefilledIdentType,
+  prefilledIdentValue,
+}: GetReportFormProps) {
   const { selectedCountry, setSelectedCountry } = useCountry()
+  const { t } = useTranslations()
+
   const [vehicleIdType, setVehicleIdType] = useState<'vin' | 'plate'>('vin')
   const [vehicleType, setVehicleType] = useState('')
   const [vinNumber, setVinNumber] = useState('')
@@ -40,28 +42,20 @@ export default function GetReportForm({ isOpen, onClose, preselectedPackage, pre
   const [countryFilter, setCountryFilter] = useState('')
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [paddleReady, setPaddleReady] = useState(false)
 
-  // Pre-fill package
   useEffect(() => { if (preselectedPackage) setSelectedPackage(preselectedPackage) }, [preselectedPackage])
-  useEffect(() => { if (prefilledIdentType && prefilledIdentValue) { setVehicleIdType(prefilledIdentType); prefilledIdentType === 'vin' ? setVinNumber(prefilledIdentValue.toUpperCase()) : setPlateNumber(prefilledIdentValue.toUpperCase()) } }, [prefilledIdentType, prefilledIdentValue])
-  useEffect(() => { if (selectedCountry && selectedCountry.code !== selectedCountryCode) setSelectedCountryCode(selectedCountry.code) }, [selectedCountry])
-
-  // Check if Paddle is ready
   useEffect(() => {
-    if (!isOpen) return
-    
-    const checkPaddle = () => {
-      const w = window as any
-      if (w.PADDLE_INITIALIZED && w.Paddle?.Checkout) {
-        setPaddleReady(true)
-      } else {
-        setTimeout(checkPaddle, 500)
-      }
+    if (prefilledIdentType && prefilledIdentValue) {
+      setVehicleIdType(prefilledIdentType)
+      prefilledIdentType === 'vin'
+        ? setVinNumber(prefilledIdentValue.toUpperCase())
+        : setPlateNumber(prefilledIdentValue.toUpperCase())
     }
-    
-    checkPaddle()
-  }, [isOpen])
+  }, [prefilledIdentType, prefilledIdentValue])
+  useEffect(() => {
+    if (selectedCountry && selectedCountry.code !== selectedCountryCode)
+      setSelectedCountryCode(selectedCountry.code)
+  }, [selectedCountry])
 
   const validateForm = () => {
     setError('')
@@ -95,26 +89,21 @@ export default function GetReportForm({ isOpen, onClose, preselectedPackage, pre
         paymentProvider: `paddle:${priceId}`,
       }
 
-      const res = await fetch('/api/orders/create', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(requestBody) })
+      const res = await fetch('/api/orders/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
+      })
       const data = await res.json()
       if (!res.ok || !data.orderId) throw new Error(data.error || 'Order creation failed')
 
       const w = window as any
-      if (!w.Paddle?.Checkout?.open) {
-        throw new Error('Paddle SDK not ready yet. Please wait a moment and try again.')
-      }
+      if (!w.Paddle?.Checkout?.open) throw new Error('Paddle SDK not ready. Please wait and try again.')
 
-      console.log('[Paddle] Opening checkout with:', { priceId, customerEmail })
-      
       w.Paddle.Checkout.open({
         items: [{ priceId, quantity: 1 }],
-        customer: {
-          email: customerEmail
-        },
-        customData: { 
-          orderId: String(data.orderId), 
-          orderNumber: String(data.orderNumber) 
-        },
+        customer: { email: customerEmail },
+        customData: { orderId: String(data.orderId), orderNumber: String(data.orderNumber) },
         settings: {
           displayMode: 'overlay',
           theme: 'light',
@@ -124,10 +113,7 @@ export default function GetReportForm({ isOpen, onClose, preselectedPackage, pre
 
       onClose()
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'Failed to process payment. Please try again.'
-      setError(errorMessage)
-      console.error('❌ Error in handleSubmit:', errorMessage)
+      setError(err instanceof Error ? err.message : 'Failed to process payment. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
@@ -135,239 +121,271 @@ export default function GetReportForm({ isOpen, onClose, preselectedPackage, pre
 
   if (!isOpen) return null
 
+  const filteredCountries = countriesList.filter(
+    (c) =>
+      c.name.toLowerCase().includes(countryFilter.toLowerCase()) ||
+      c.code.toLowerCase().includes(countryFilter.toLowerCase())
+  )
+
   return (
     <>
-      <div className="fixed inset-0 bg-black/50 z-[9998]" onClick={onClose} />
-      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-background z-[9999] rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="p-8">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">
-              Get Vehicle Report
-            </h2>
-            <button
-              onClick={onClose}
-              className="p-2 hover:bg-muted rounded-lg transition-colors"
+      {/* Backdrop */}
+      <div
+        className="fixed inset-0 z-[9998]"
+        style={{ background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(12px)' }}
+        onClick={onClose}
+      />
+
+      {/* Modal */}
+      <div
+        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[9999] w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl"
+        style={{
+          background: 'linear-gradient(180deg, #0d1b2e 0%, #0a0f1e 100%)',
+          border: '1px solid rgba(255,255,255,0.07)',
+        }}
+      >
+        {/* Header */}
+        <div
+          className="px-6 sm:px-7 py-4 sm:py-5 flex items-center justify-between"
+          style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)' }}
+        >
+          <div className="flex items-center gap-3">
+            <div
+              className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+              style={{ background: 'rgba(120,0,0,0.2)', border: '1px solid rgba(120,0,0,0.3)' }}
             >
-              <X className="w-6 h-6 text-muted-foreground" />
-            </button>
+              <Car className="w-4 h-4" style={{ color: '#c0392b' }} />
+            </div>
+            <div>
+              <h2 className="text-base sm:text-lg font-bold text-white leading-none">Get Vehicle Report</h2>
+              <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                Complete the form to access the full report
+              </p>
+            </div>
           </div>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors hover:bg-white/10"
+            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
+          >
+            <X className="w-4 h-4" style={{ color: 'rgba(255,255,255,0.5)' }} />
+          </button>
+        </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <Label className="block text-sm font-semibold text-foreground mb-2">
+        {/* Body */}
+        <div className="px-6 sm:px-7 py-5 sm:py-6 space-y-5 max-h-[80vh] overflow-y-auto">
+          <form onSubmit={handleSubmit} className="space-y-5">
+
+            {/* VIN / Plate toggle */}
+            <div className="space-y-2">
+              <label className="text-xs font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.35)' }}>
                 Search By
-              </Label>
-              <div className="mb-2">
-                <div className="inline-flex items-center bg-muted rounded-full p-1 gap-1">
-                  <button
-                    type="button"
-                    onClick={() => setVehicleIdType('vin')}
-                    className={`flex items-center gap-2 px-3 py-1 rounded-full transition-all ${
-                      vehicleIdType === 'vin'
-                        ? 'bg-primary text-primary-foreground shadow'
-                        : 'text-foreground hover:bg-muted/80'
-                    }`}
-                  >
-                    <Key className="w-4 h-4" />
-                    <span className="text-sm font-medium">By VIN</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setVehicleIdType('plate')}
-                    className={`flex items-center gap-2 px-3 py-1 rounded-full transition-all ${
-                      vehicleIdType === 'plate'
-                        ? 'bg-secondary text-secondary-foreground shadow'
-                        : 'text-foreground hover:bg-muted/80'
-                    }`}
-                  >
-                    <Hash className="w-4 h-4" />
-                    <span className="text-sm font-medium">By Plate</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {vehicleIdType === 'vin' ? (
-              <div>
-                <Label htmlFor="vin" className="block text-sm font-semibold text-foreground mb-2">
-                  VIN Number
-                </Label>
-                <div className="relative">
-                  <Input
-                    id="vin"
-                    type="text"
-                    value={vinNumber}
-                    onChange={(e) => setVinNumber(e.target.value.toUpperCase())}
-                    placeholder="Enter VIN number"
-                    required
-                    className="h-12 pr-10"
-                    maxLength={17}
-                  />
-                  <button
-                    type="button"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                  >
-                    <HelpCircle className="w-5 h-5" />
-                  </button>
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Enter your 17-character Vehicle Identification Number
-                </p>
-              </div>
-            ) : (
-              <div>
-                <Label
-                  htmlFor="plate"
-                  className="block text-sm font-semibold text-foreground mb-2"
-                >
-                  Plate Number
-                </Label>
-                <Input
-                  id="plate"
-                  type="text"
-                  value={plateNumber}
-                  onChange={(e) => setPlateNumber(e.target.value.toUpperCase())}
-                  placeholder="Enter Plate Number"
-                  required
-                  className="h-12"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Enter your vehicle&apos;s license plate number
-                </p>
-              </div>
-            )}
-
-            <div>
-              <Label htmlFor="vehicleType" className="block text-sm font-semibold text-foreground mb-2">
-                Vehicle Type
-              </Label>
-              <Select value={vehicleType} onValueChange={setVehicleType}>
-                <SelectTrigger className="h-12">
-                  <SelectValue placeholder="Select vehicle type" />
-                </SelectTrigger>
-                <SelectContent className="z-[10000]">
-                  {vehicleTypes.map((type) => (
-                    <SelectItem key={type} value={type}>
-                      {type}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div>
-              <Label htmlFor="email" className="block text-sm font-semibold text-foreground mb-2">
-                Email Address
-              </Label>
-              <Input
-                id="email"
-                type="email"
-                value={customerEmail}
-                onChange={(e) => setCustomerEmail(e.target.value)}
-                placeholder="your.email@example.com"
-                required
-                className="h-12"
-              />
-            </div>
-
-            <div>
-              <Label className="block text-sm font-semibold text-foreground mb-2">Country</Label>
-              <Select
-                value={selectedCountryCode}
-                onValueChange={(v) => {
-                  setSelectedCountryCode(v)
-                  const found = countriesList.find((c) => c.code === v)
-                  if (found) setSelectedCountry(found)
-                }}
+              </label>
+              <div
+                className="flex gap-2 p-1 rounded-xl"
+                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}
               >
-                <SelectTrigger className="h-12">
-                  <SelectValue placeholder="Select country" />
-                </SelectTrigger>
-                <SelectContent className="z-[10000] max-h-60 overflow-auto">
-                  <div className="p-2">
-                    <TextInput
-                      value={countryFilter}
-                      onChange={(e) => setCountryFilter(e.target.value)}
-                      placeholder="Search countries"
-                      className="mb-2 h-9"
-                    />
-                  </div>
-                  {countriesList
-                    .filter(
-                      (c) =>
-                        c.name.toLowerCase().includes(countryFilter.toLowerCase()) ||
-                        c.code.toLowerCase().includes(countryFilter.toLowerCase())
-                    )
-                    .map((c) => (
-                      <SelectItem key={c.code} value={c.code}>
-                        {c.name}
-                      </SelectItem>
-                    ))}
-                </SelectContent>
-              </Select>
+                <button
+                  type="button"
+                  onClick={() => setVehicleIdType('vin')}
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200"
+                  style={
+                    vehicleIdType === 'vin'
+                      ? { background: 'linear-gradient(135deg, #780000, #9b1111)', color: '#fff', boxShadow: '0 4px 16px rgba(120,0,0,0.35)' }
+                      : { color: 'rgba(255,255,255,0.35)' }
+                  }
+                >
+                  <Key className="w-4 h-4" />
+                  By VIN
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setVehicleIdType('plate')}
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200"
+                  style={
+                    vehicleIdType === 'plate'
+                      ? { background: 'linear-gradient(135deg, #1a3a6e, #2a5aaa)', color: '#fff', boxShadow: '0 4px 16px rgba(42,90,170,0.35)' }
+                      : { color: 'rgba(255,255,255,0.35)' }
+                  }
+                >
+                  <Hash className="w-4 h-4" />
+                  By Plate
+                </button>
+              </div>
             </div>
 
-            <div>
-              <Label className="block text-sm font-semibold text-gray-900 mb-4">
-                Select Your Package
-              </Label>
+            {/* VIN / Plate input */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                {vehicleIdType === 'vin' ? 'VIN Number' : 'Plate Number'}
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={vehicleIdType === 'vin' ? vinNumber : plateNumber}
+                  onChange={(e) =>
+                    vehicleIdType === 'vin'
+                      ? setVinNumber(e.target.value.toUpperCase())
+                      : setPlateNumber(e.target.value.toUpperCase())
+                  }
+                  placeholder={vehicleIdType === 'vin' ? 'Enter 17-character VIN' : 'Enter license plate number'}
+                  maxLength={vehicleIdType === 'vin' ? 17 : undefined}
+                  className="w-full h-12 px-4 pr-11 rounded-xl text-sm font-mono text-white placeholder:text-white/20 outline-none border transition-all focus:border-red-900/60"
+                  style={{ background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.09)' }}
+                  required
+                />
+                <button type="button" className="absolute right-3.5 top-1/2 -translate-y-1/2">
+                  <HelpCircle className="w-4 h-4" style={{ color: 'rgba(255,255,255,0.2)' }} />
+                </button>
+              </div>
+              <p className="text-xs" style={{ color: 'rgba(255,255,255,0.25)' }}>
+                {vehicleIdType === 'vin' ? '17-character Vehicle Identification Number' : "Your vehicle's license plate number"}
+              </p>
+            </div>
+
+            {/* Vehicle type + Country */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                  Vehicle Type
+                </label>
+                <select
+                  value={vehicleType}
+                  onChange={(e) => setVehicleType(e.target.value)}
+                  required
+                  className="w-full h-12 px-4 rounded-xl text-sm outline-none border transition-all appearance-none"
+                  style={{
+                    background: 'rgba(255,255,255,0.04)',
+                    borderColor: 'rgba(255,255,255,0.09)',
+                    color: vehicleType ? '#fff' : 'rgba(255,255,255,0.3)',
+                  }}
+                >
+                  <option value="" disabled style={{ background: '#0d1b2e' }}>Select type</option>
+                  {vehicleTypes.map((t) => (
+                    <option key={t} value={t} style={{ background: '#0d1b2e', color: '#fff' }}>{t}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                  Country
+                </label>
+                <select
+                  value={selectedCountryCode}
+                  onChange={(e) => {
+                    setSelectedCountryCode(e.target.value)
+                    const found = countriesList.find((c) => c.code === e.target.value)
+                    if (found) setSelectedCountry(found)
+                  }}
+                  className="w-full h-12 px-4 rounded-xl text-sm text-white outline-none border transition-all appearance-none"
+                  style={{ background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.09)' }}
+                >
+                  {filteredCountries.map((c) => (
+                    <option key={c.code} value={c.code} style={{ background: '#0d1b2e', color: '#fff' }}>{c.name}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Email */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                Email Address
+              </label>
+              <div className="relative">
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'rgba(255,255,255,0.2)' }} />
+                <input
+                  type="email"
+                  value={customerEmail}
+                  onChange={(e) => setCustomerEmail(e.target.value)}
+                  placeholder="your.email@example.com"
+                  required
+                  className="w-full h-12 pl-10 pr-4 rounded-xl text-sm text-white placeholder:text-white/20 outline-none border transition-all"
+                  style={{ background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.09)' }}
+                />
+              </div>
+              <p className="text-xs" style={{ color: 'rgba(255,255,255,0.25)' }}>Your report link will be delivered here</p>
+            </div>
+
+            {/* Package selection */}
+            <div className="space-y-2.5">
+              <label className="text-xs font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                Select Package
+              </label>
               <div className="grid grid-cols-3 gap-3">
-                {packages.map((pkg) => (
+                {packages.map((p) => (
                   <button
-                    key={pkg.id}
+                    key={p.id}
                     type="button"
-                    onClick={() => setSelectedPackage(pkg.id)}
-                    className={`p-3 rounded-lg border-2 transition-all text-center ${
-                      selectedPackage === pkg.id
-                        ? 'bg-primary/10 border-primary shadow-lg'
-                        : 'bg-background border-border hover:border-primary/30 hover:shadow-md'
-                    }`}
+                    onClick={() => setSelectedPackage(p.id)}
+                    className="relative p-4 rounded-xl text-left transition-all"
+                    style={
+                      selectedPackage === p.id
+                        ? { background: 'rgba(120,0,0,0.15)', border: '1.5px solid rgba(120,0,0,0.6)', boxShadow: '0 0 20px rgba(120,0,0,0.15)' }
+                        : { background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }
+                    }
                   >
-                    <div className="font-bold text-sm text-foreground">{pkg.name}</div>
-                    <div className="text-xs text-muted-foreground mt-2">
-                      {formatCurrency(
-                        getPrice(pkg.id as any, selectedCountry.currency),
-                        selectedCountry.currency
-                      )}
+                    {selectedPackage === p.id && (
+                      <div className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full" style={{ background: '#c0392b' }} />
+                    )}
+                    <div className="text-sm font-bold text-white mb-1">{p.name}</div>
+                    <div
+                      className="text-base font-black mb-1.5"
+                      style={{ color: selectedPackage === p.id ? '#c0392b' : 'rgba(255,255,255,0.5)' }}
+                    >
+                      {formatCurrency(getPrice(p.id as any, selectedCountry.currency), selectedCountry.currency)}
                     </div>
+                    <div className="text-xs leading-snug" style={{ color: 'rgba(255,255,255,0.3)' }}>{p.desc}</div>
                   </button>
                 ))}
               </div>
             </div>
 
+            {/* Error */}
             {error && (
-              <div className="p-4 bg-destructive/10 border border-destructive/30 rounded-lg">
-                <p className="text-sm text-destructive">{error}</p>
+              <div
+                className="flex items-center gap-2.5 p-3.5 rounded-xl"
+                style={{ background: 'rgba(220,38,38,0.1)', border: '1px solid rgba(220,38,38,0.25)' }}
+              >
+                <AlertCircle className="w-4 h-4 flex-shrink-0" style={{ color: '#f87171' }} />
+                <p className="text-sm" style={{ color: '#f87171' }}>{error}</p>
               </div>
             )}
 
-            <div className="flex gap-4 pt-4">
-              <Button
+            {/* Actions */}
+            <div className="flex gap-3 pt-1">
+              <button
                 type="button"
-                variant="outline"
                 onClick={onClose}
-                className="flex-1 h-12"
                 disabled={isSubmitting}
+                className="flex-1 h-12 rounded-xl text-sm font-semibold transition-all disabled:opacity-50"
+                style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.5)' }}
               >
                 Cancel
-              </Button>
-              <Button
+              </button>
+              <button
                 type="submit"
-                className="flex-1 h-12 bg-primary hover:bg-primary/90 text-primary-foreground"
                 disabled={isSubmitting || !selectedPackage}
+                className="flex-[2] h-12 rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{ background: 'linear-gradient(135deg, #780000 0%, #a01515 100%)', color: '#fff', boxShadow: '0 8px 24px rgba(120,0,0,0.35)' }}
               >
-                {isSubmitting
-                  ? 'Processing...'
-                  : `Continue to Payment - ${
-                      selectedPackage
-                        ? formatCurrency(
-                            getPrice(selectedPackage as any, selectedCountry.currency),
-                            selectedCountry.currency
-                          )
-                        : '$0'
-                    }`}
-              </Button>
+                {isSubmitting ? (
+                  'Processing...'
+                ) : (
+                  <>
+                    <Shield className="w-4 h-4" />
+                    Continue to Payment
+                    {selectedPackage && ` — ${formatCurrency(getPrice(selectedPackage as any, selectedCountry.currency), selectedCountry.currency)}`}
+                    <ChevronRight className="w-4 h-4" />
+                  </>
+                )}
+              </button>
             </div>
+
+            <p className="text-center text-xs pb-1" style={{ color: 'rgba(255,255,255,0.2)' }}>
+              Secured by Paddle · 256-bit encryption · Instant delivery
+            </p>
           </form>
         </div>
       </div>

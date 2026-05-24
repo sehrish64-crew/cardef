@@ -59,16 +59,20 @@ export default function HowItWorks() {
   return (
     <section
       ref={sectionRef}
-      className="py-12 sm:py-16 md:py-24 bg-gradient-to-br from-[#780000]/10 via-white to-[#780000]/5 relative overflow-hidden"
+      className="relative py-12 sm:py-16 md:py-24 overflow-hidden"
+      style={{
+        backgroundImage:
+          'radial-gradient(circle at top left, rgba(120,0,0,0.18), transparent 28%), radial-gradient(circle at bottom right, rgba(10,142,255,0.16), transparent 36%), linear-gradient(135deg, #0a0f1e 0%, #0d1b2e 40%, #0a1628 100%)',
+      }}
     >
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
 
         {/* HEADER */}
         <div className="text-center max-w-4xl mx-auto mb-10 sm:mb-12">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-3">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3">
             {t('howitworks_title')}
           </h2>
-          <p className="text-sm sm:text-base md:text-lg text-gray-700">
+          <p className="text-sm sm:text-base md:text-lg text-white/70">
             {t('howitworks_subtitle')}
           </p>
         </div>
@@ -82,7 +86,7 @@ export default function HowItWorks() {
             return (
               <div
                 key={index}
-                className={`transition-all duration-700 ${
+                className={`rounded-3xl border border-white/10 bg-white/5 p-8 shadow-[0_30px_80px_rgba(0,0,0,0.18)] transition-all duration-700 ${
                   isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'
                 }`}
               >
@@ -90,10 +94,10 @@ export default function HowItWorks() {
                 <div className="flex gap-5 items-start">
 
                   {/* NUMBER BADGE */}
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-[#780000] blur-xl opacity-30 rounded-2xl"></div>
+                  <div className="relative flex-shrink-0">
+                    <div className="absolute inset-0 bg-[#780000]/20 blur-3xl rounded-2xl" />
 
-                    <div className="w-16 h-16 bg-[#780000] rounded-2xl flex items-center justify-center shadow-lg hover:scale-110 transition">
+                    <div className="relative w-16 h-16 bg-[#780000]/15 rounded-2xl flex items-center justify-center border border-white/10">
                       <span className="text-white text-2xl font-bold">
                         {step.number}
                       </span>
@@ -103,17 +107,17 @@ export default function HowItWorks() {
                   {/* CONTENT */}
                   <div>
 
-                    <h3 className="text-lg font-bold text-gray-900 mb-2 hover:text-[#780000] transition">
+                    <h3 className="text-lg font-bold text-white mb-2">
                       {t(step.titleKey)}
                     </h3>
 
-                    <p className="text-gray-600 text-sm mb-3 leading-relaxed">
+                    <p className="text-white/70 text-sm mb-3 leading-relaxed">
                       {t(step.descKey)}
                     </p>
 
                     <a
                       href="#"
-                      className="inline-flex items-center gap-2 text-[#780000] font-semibold hover:opacity-80"
+                      className="inline-flex items-center gap-2 text-[#f87171] font-semibold hover:text-[#ffb3b3]"
                     >
                       {t(step.linkKey)}
                       <ArrowRight className="w-4 h-4" />
@@ -133,7 +137,7 @@ export default function HowItWorks() {
         <div className="text-center mt-12">
           <Link
             href="/pricing"
-            className="inline-flex items-center gap-2 bg-[#780000] hover:bg-[#5a0000] text-white font-bold px-8 py-4 rounded-full transition hover:scale-105"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-[#780000] to-[#9b111e] text-white font-bold px-8 py-4 rounded-full shadow-lg shadow-[#780000]/20 transition hover:scale-105"
           >
             {t('howitworks_cta')}
             <ArrowRight className="w-5 h-5" />

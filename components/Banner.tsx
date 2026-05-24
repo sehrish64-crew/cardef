@@ -1,401 +1,332 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Car, Truck, Bus, Ship, CheckCircle2, HelpCircle, Key, Hash, X, Loader, Bike } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Car, Truck, Bus, Ship, Bike, CheckCircle2, Key, Hash, ChevronRight, Shield, Clock, Star } from 'lucide-react'
 import GetReportForm from './GetReportForm'
 import { useTranslations } from '@/lib/translations'
 
 export default function Banner() {
+  const [tab, setTab] = useState<'vin' | 'plate'>('vin')
   const [vin, setVin] = useState('')
-  const [vinError, setVinError] = useState('')
-  const [vehicleIdType, setVehicleIdType] = useState<'vin' | 'plate' | null>(null)
-  const [plateNumber, setPlateNumber] = useState('')
-  const [plateError, setPlateError] = useState('')
+  const [plate, setPlate] = useState('')
   const [isFormOpen, setIsFormOpen] = useState(false)
-  const [isBasicReportOpen, setIsBasicReportOpen] = useState(false)
-  const [basicReportData, setBasicReportData] = useState<any>(null)
-  const [isLoadingReport, setIsLoadingReport] = useState(false)
   const [isHydrated, setIsHydrated] = useState(false)
   const { t } = useTranslations()
 
-  // Initialize state after hydration
   useEffect(() => {
-    setVehicleIdType('vin')
     setIsHydrated(true)
   }, [])
 
-  const handleDecodeVIN = async () => {
-    if (!vin.trim()) {
-      setVinError(t('vin_no_vin_alert'))
-      setTimeout(() => setVinError(''), 3000)
-      return
-    }
+  const value = tab === 'vin' ? vin : plate
+  const canSubmit = isHydrated && value.trim().length > 0
 
-    // Direct to manual form as requested
+  const handleSubmit = () => {
+    if (!value.trim()) return
     setIsFormOpen(true)
   }
 
-  const handleGetReport = () => {
-    if (vehicleIdType === 'vin') {
-      if (!vin.trim()) {
-        setVinError(t('vin_no_vin_alert'))
-        setTimeout(() => setVinError(''), 3000)
-        return
-      }
-    } else {
-      if (!plateNumber.trim()) {
-        setPlateError('Please enter a plate number to continue')
-        setTimeout(() => setPlateError(''), 3000)
-        return
-      }
-    }
-
-    setIsFormOpen(true)
-  }
+  const checks = [
+    t('banner_checks_damage'),
+    t('banner_checks_market_value'),
+    t('banner_checks_mileage'),
+    t('banner_checks_more'),
+    t('banner_checks_specs'),
+    t('banner_checks_title_check'),
+    t('banner_checks_safety_ratings'),
+    t('banner_checks_natural_disaster'),
+  ]
 
   return (
-    <section className="relative py-12 sm:py-16 md:py-24 overflow-hidden">
-      {/* Background Video */}
-      <div className="absolute inset-0 z-0">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-        >
-          <source src="/banner-vedio.mp4" type="video/mp4" />
-        </video>
-        {/* Premium Overlay for readability and visual appeal */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-blue-900/40 to-black/50"></div>
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30"></div>
-      </div>
+    <section
+      className="relative min-h-screen font-sans overflow-hidden"
+      style={{ background: 'linear-gradient(135deg, #0a0f1e 0%, #0d1b2e 40%, #0a1628 100%)' }}
+    >
+      {/* Subtle grid overlay */}
+      <div
+        className="absolute inset-0 opacity-[0.04] pointer-events-none"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
+          backgroundSize: '60px 60px',
+        }}
+      />
 
-      {/* Content */}
-      <div className="relative z-10">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center">
-          <div className="space-y-6 sm:space-y-8">
-            <div className="space-y-2 sm:space-y-4">
-              <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.2] sm:leading-tight drop-shadow-lg">
+      {/* Ambient glows */}
+      <div
+        className="absolute top-0 left-1/4 w-96 h-96 rounded-full opacity-10 blur-3xl pointer-events-none"
+        style={{ background: 'radial-gradient(circle, #780000 0%, transparent 70%)' }}
+      />
+      <div
+        className="absolute bottom-0 right-1/4 w-80 h-80 rounded-full opacity-10 blur-3xl pointer-events-none"
+        style={{ background: 'radial-gradient(circle, #1a4a8a 0%, transparent 70%)' }}
+      />
+
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-20 max-w-7xl">
+        {/* Top badge */}
+        <div className="flex justify-center mb-8 sm:mb-10">
+          <div
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-semibold tracking-wide uppercase"
+            style={{ borderColor: 'rgba(120,0,0,0.5)', background: 'rgba(120,0,0,0.12)', color: '#f87171' }}
+          >
+            <Shield className="w-3.5 h-3.5" />
+            Trusted by 2M+ buyers worldwide
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          {/* ── Left column ── */}
+          <div className="space-y-8 sm:space-y-10">
+            {/* Headline */}
+            <div className="space-y-4 sm:space-y-5">
+              <h1 className="text-4xl sm:text-5xl xl:text-6xl font-black leading-[1.08] tracking-tight text-white">
                 {t('banner_title')}
               </h1>
-              <p className="text-xs sm:text-base md:text-lg lg:text-xl text-white/95 drop-shadow-md leading-relaxed">
+              <p className="text-base sm:text-lg leading-relaxed max-w-md" style={{ color: 'rgba(186,220,255,0.6)' }}>
                 {t('banner_subtitle')}
               </p>
             </div>
 
-            <div className="space-y-4">
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center justify-between">
-                  <div className="inline-flex items-center bg-white/10 p-1 rounded-full gap-0.5 sm:gap-1">
-                    <button 
-                      type="button" 
-                      onClick={() => setVehicleIdType('vin')} 
-                      className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 rounded-full transition-all text-xs sm:text-sm font-medium ${isHydrated && vehicleIdType === 'vin' ? 'bg-[#780000] text-white shadow' : 'text-black hover:bg-white/10'}`}
-                      suppressHydrationWarning
-                    >
-                      <Key className="w-3 sm:w-4 h-3 sm:h-4" />
-                      <span className="hidden sm:inline">By VIN</span>
-                      <span className="sm:hidden">VIN</span>
-                    </button>
-                    <button 
-                      type="button" 
-                      onClick={() => setVehicleIdType('plate')} 
-                      className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 rounded-full transition-all text-xs sm:text-sm font-medium ${isHydrated && vehicleIdType === 'plate' ? 'bg-gradient-to-r from-blue-500 to-cyan-400 text-white shadow' : 'text-black hover:bg-white/10'}`}
-                      suppressHydrationWarning
-                    >
-                      <Hash className="w-3 sm:w-4 h-3 sm:h-4" />
-                      <span className="hidden sm:inline">By Plate</span>
-                      <span className="sm:hidden">Plate</span>
-                    </button>
+            {/* Stats */}
+            <div className="flex items-center gap-6 sm:gap-8">
+              {[
+                { val: '50+', label: 'Data Sources' },
+                { val: '2M+', label: 'Reports Generated' },
+                { val: '99%', label: 'Accuracy Rate' },
+              ].map((s) => (
+                <div key={s.label}>
+                  <div className="text-xl sm:text-2xl font-black text-white">{s.val}</div>
+                  <div className="text-xs font-medium mt-0.5" style={{ color: 'rgba(147,197,253,0.5)' }}>
+                    {s.label}
                   </div>
                 </div>
+              ))}
+            </div>
 
-                <div className="relative">
-                  {/* VIN Input - Show based on vehicleIdType */}
-                  <div className={isHydrated && vehicleIdType === 'vin' ? 'block' : 'hidden'}>
-                    <Input
-                      type="text"
-                      placeholder={t('banner_input_placeholder')}
-                      value={vin}
-                      onChange={(e) => { setVin(e.target.value.toUpperCase()); if (vinError) setVinError('') }}
-                      className="h-12 pr-10 text-base sm:text-lg w-full bg-white"
-                    />
-                    {vinError && (
-                      <p className="text-xs text-red-500 mt-1">{vinError}</p>
-                    )}
-                  </div>
-
-                  {/* Plate Input - Show based on vehicleIdType */}
-                  <div className={isHydrated && vehicleIdType === 'plate' ? 'block' : 'hidden'}>
-                    <Input
-                      type="text"
-                      placeholder="Enter Plate Number"
-                      value={plateNumber}
-                      onChange={(e) => { setPlateNumber(e.target.value.toUpperCase()); if (plateError) setPlateError('') }}
-                      className="h-12 pr-10 text-base sm:text-lg w-full bg-white"
-                    />
-                    {plateError && (
-                      <p className="text-xs text-red-500 mt-1">{plateError}</p>
-                    )}
-                  </div>
-
-                  {/* Default render - both inputs in DOM for hydration match */}
-                  {!isHydrated && (
-                    <>
-                      <Input
-                        type="text"
-                        placeholder={t('banner_input_placeholder')}
-                        value={vin}
-                        onChange={(e) => { setVin(e.target.value.toUpperCase()); if (vinError) setVinError('') }}
-                        className="h-12 pr-10 text-base sm:text-lg w-full bg-white"
-                      />
-                    </>
-                  )}
-
-                  <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600" suppressHydrationWarning>
-                    <HelpCircle className="w-5 h-5" />
+            {/* Input card */}
+            <div
+              className="rounded-2xl p-[1.5px]"
+              style={{
+                background: 'linear-gradient(135deg, rgba(120,0,0,0.4) 0%, rgba(20,50,100,0.4) 100%)',
+                boxShadow: '0 25px 60px rgba(0,0,0,0.5)',
+              }}
+            >
+              <div
+                className="rounded-[14px] p-5 sm:p-6 space-y-4 sm:space-y-5"
+                style={{ background: 'rgba(6,12,24,0.9)', backdropFilter: 'blur(20px)' }}
+              >
+                {/* VIN / Plate tabs */}
+                <div className="flex gap-2" suppressHydrationWarning>
+                  <button
+                    type="button"
+                    onClick={() => setTab('vin')}
+                    className="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all duration-200"
+                    style={
+                      isHydrated && tab === 'vin'
+                        ? { background: 'linear-gradient(135deg, #780000, #9b1111)', color: '#fff', boxShadow: '0 4px 16px rgba(120,0,0,0.4)' }
+                        : { background: 'transparent', color: 'rgba(255,255,255,0.35)' }
+                    }
+                    suppressHydrationWarning
+                  >
+                    <Key className="w-4 h-4" />
+                    By VIN
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTab('plate')}
+                    className="flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all duration-200"
+                    style={
+                      isHydrated && tab === 'plate'
+                        ? { background: 'linear-gradient(135deg, #1a3a6e, #2a5aaa)', color: '#fff', boxShadow: '0 4px 16px rgba(42,90,170,0.4)' }
+                        : { background: 'transparent', color: 'rgba(255,255,255,0.35)' }
+                    }
+                    suppressHydrationWarning
+                  >
+                    <Hash className="w-4 h-4" />
+                    By Plate
                   </button>
                 </div>
 
-                <div className="mt-2 sm:mt-3 md:mt-4 flex">
-                  <Button
-                    onClick={isHydrated && vehicleIdType === 'vin' ? handleDecodeVIN : handleGetReport}
-                    className="bg-[#780000] hover:bg-[#580000] text-white font-bold h-10 sm:h-12 px-4 sm:px-8 w-full shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
-                    disabled={isHydrated && vehicleIdType === 'vin' ? !vin.trim() || isLoadingReport : !plateNumber.trim()}
+                {/* Input */}
+                <div className="space-y-3">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={tab === 'vin' ? vin : plate}
+                      onChange={(e) =>
+                        tab === 'vin'
+                          ? setVin(e.target.value.toUpperCase())
+                          : setPlate(e.target.value.toUpperCase())
+                      }
+                      placeholder={
+                        tab === 'vin'
+                          ? t('banner_input_placeholder')
+                          : 'Enter license plate number'
+                      }
+                      className="w-full h-12 sm:h-14 px-5 pr-14 rounded-xl text-sm font-mono text-white placeholder:text-white/20 outline-none transition-all border"
+                      style={{
+                        background: 'rgba(255,255,255,0.05)',
+                        borderColor: canSubmit ? 'rgba(120,0,0,0.6)' : 'rgba(255,255,255,0.08)',
+                      }}
+                      suppressHydrationWarning
+                    />
+                    {canSubmit && (
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                        <CheckCircle2 className="w-5 h-5" style={{ color: '#c0392b' }} />
+                      </div>
+                    )}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleSubmit}
+                    disabled={!canSubmit}
+                    className="w-full h-12 sm:h-14 rounded-xl font-bold text-sm tracking-wide flex items-center justify-center gap-2 transition-all duration-200 disabled:cursor-not-allowed"
+                    style={{
+                      background: canSubmit
+                        ? 'linear-gradient(135deg, #780000 0%, #a01515 100%)'
+                        : 'rgba(255,255,255,0.06)',
+                      color: canSubmit ? '#fff' : 'rgba(255,255,255,0.2)',
+                      boxShadow: canSubmit ? '0 8px 30px rgba(120,0,0,0.4)' : 'none',
+                    }}
                     suppressHydrationWarning
                   >
-                    {isLoadingReport ? (
-                      <span className="flex items-center gap-2">
-                        <Loader className="w-4 h-4 animate-spin" />
-                        Loading...
-                      </span>
-                    ) : (
-                      t('banner_get_report')
-                    )}
-                  </Button>
+                    {t('banner_get_report')}
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
                 </div>
+
+                <p className="text-center text-xs" style={{ color: 'rgba(255,255,255,0.2)' }}>
+                  Instant results · No account required · 256-bit encrypted
+                </p>
               </div>
             </div>
 
-            <div className="space-y-3 sm:space-y-4">
-              <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm text-white/90">
-                <span className="font-semibold whitespace-nowrap">{t('banner_we_check')}</span>
-                <div className="flex gap-2 sm:gap-3">
-                  <Car className="w-4 sm:w-5 h-4 sm:h-5 drop-shadow" />
-                  <Truck className="w-4 sm:w-5 h-4 sm:h-5 drop-shadow" />
-                  <Bus className="w-4 sm:w-5 h-4 sm:h-5 drop-shadow" />
-                  <Ship className="w-4 sm:w-5 h-4 sm:h-5 drop-shadow" />
-                  <Bike className="w-4 sm:w-5 h-4 sm:h-5 drop-shadow" />
-                </div>
-              </div>
-
-              <div className="space-y-2 bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-xl p-3 sm:p-4 border border-white/20">
-                <p className="text-xs sm:text-sm font-bold text-white">{t('banner_report_title')}</p>
-                <p className="text-xs sm:text-sm text-white/90">{t('banner_report_subtitle')}</p>
-                <div className="grid grid-cols-2 gap-x-3 sm:gap-x-6 gap-y-1.5 sm:gap-y-2 mt-2 sm:mt-3">
-                  <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-white/95">
-                    <CheckCircle2 className="w-3 sm:w-4 h-3 sm:h-4 text-[#780000] flex-shrink-0" />
-                    <span>{t('banner_checks_damage')}</span>
+            {/* Vehicle types */}
+            <div className="flex items-center gap-3">
+              <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                {t('banner_we_check')}
+              </span>
+              <div className="flex items-center gap-2">
+                {[Car, Truck, Bus, Ship, Bike].map((Icon, i) => (
+                  <div
+                    key={i}
+                    className="w-8 h-8 rounded-lg flex items-center justify-center"
+                    style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.07)' }}
+                  >
+                    <Icon className="w-4 h-4" style={{ color: 'rgba(255,255,255,0.4)' }} />
                   </div>
-                  <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-white/95">
-                    <CheckCircle2 className="w-3 sm:w-4 h-3 sm:h-4 text-[#780000] flex-shrink-0" />
-                    <span>{t('banner_checks_market_value')}</span>
-                  </div>
-                  <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-white/95">
-                    <CheckCircle2 className="w-3 sm:w-4 h-3 sm:h-4 text-[#780000] flex-shrink-0" />
-                    <span>{t('banner_checks_mileage')}</span>
-                  </div>
-                  <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-white/95">
-                    <CheckCircle2 className="w-3 sm:w-4 h-3 sm:h-4 text-[#780000] flex-shrink-0" />
-                    <span>{t('banner_checks_more')}</span>
-                  </div>
-                  <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-white/95">
-                    <CheckCircle2 className="w-3 sm:w-4 h-3 sm:h-4 text-[#780000] flex-shrink-0" />
-                    <span>{t('banner_checks_specs')}</span>
-                  </div>
-                  <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-white/95">
-                    <CheckCircle2 className="w-3 sm:w-4 h-3 sm:h-4 text-[#780000] flex-shrink-0" />
-                    <span>{t('banner_checks_title_check')}</span>
-                  </div>
-                  <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-white/95">
-                    <CheckCircle2 className="w-3 sm:w-4 h-3 sm:h-4 text-[#780000] flex-shrink-0" />
-                    <span>{t('banner_checks_safety_ratings')}</span>
-                  </div>
-                  <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-white/95">
-                    <CheckCircle2 className="w-3 sm:w-4 h-3 sm:h-4 text-[#780000] flex-shrink-0" />
-                    <span>{t('banner_checks_natural_disaster')}</span>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
 
-          {/* <div className="hidden md:flex justify-center items-center relative">
-            <div className="relative w-full max-w-md">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full blur-3xl opacity-20 animate-pulse"></div>
-
-              <div className="relative animate-float">
-                <div className="absolute -inset-4 bg-gradient-to-r from-[#780000] via-blue-500 to-cyan-500 rounded-3xl opacity-30 blur-2xl animate-spin-slow"></div>
-
-                <div className="relative bg-white/50 backdrop-blur-sm rounded-3xl overflow-hidden shadow-2xl border border-white/20 transform hover:scale-105 transition-transform duration-500">
-                  <div className="relative h-96">
-                    <Image
-                      src="/banner-hero.png"
-                      alt="Banner hero image"
-                      fill
-                      className="object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-blue-900/40 to-transparent"></div>
-                    <div className="absolute bottom-6 left-6 right-6">
-                      <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg">
-                        <h3 className="font-bold text-gray-900 mb-1">Comprehensive Report</h3>
-                        <p className="text-sm text-gray-600">Complete vehicle history in seconds</p>
-                      </div>
-                    </div>
-                  </div>
+          {/* ── Right column ── */}
+          <div className="space-y-4 sm:space-y-6">
+            {/* Report preview card */}
+            <div
+              className="rounded-2xl overflow-hidden"
+              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}
+            >
+              {/* Card header */}
+              <div
+                className="px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between"
+                style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)' }}
+              >
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-widest" style={{ color: '#c0392b' }}>
+                    {t('banner_report_title')}
+                  </p>
+                  <p className="text-white font-semibold mt-0.5 text-sm sm:text-base">
+                    {t('banner_report_subtitle')}
+                  </p>
+                </div>
+                <div className="flex items-center gap-0.5">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-3.5 h-3.5 fill-current" style={{ color: '#f59e0b' }} />
+                  ))}
+                  <span className="text-xs ml-1" style={{ color: 'rgba(255,255,255,0.4)' }}>4.9</span>
                 </div>
               </div>
 
-              <div className="absolute -top-8 -right-8 w-24 h-24 bg-[#780000] rounded-full flex items-center justify-center shadow-xl animate-bounce-slow z-10">
-                <CheckCircle2 className="w-12 h-12 text-gray-900" strokeWidth={2.5} />
+              {/* Checks grid */}
+              <div className="p-5 sm:p-6 grid grid-cols-2 gap-2.5 sm:gap-3">
+                {checks.map((check) => (
+                  <div key={check} className="flex items-center gap-2 sm:gap-2.5">
+                    <div
+                      className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center"
+                      style={{ background: 'rgba(120,0,0,0.2)' }}
+                    >
+                      <CheckCircle2 className="w-3.5 h-3.5" style={{ color: '#c0392b' }} />
+                    </div>
+                    <span className="text-xs sm:text-sm font-medium" style={{ color: 'rgba(255,255,255,0.7)' }}>
+                      {check}
+                    </span>
+                  </div>
+                ))}
               </div>
 
-              <div className="absolute -bottom-6 -left-6 w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center shadow-xl animate-pulse-slow z-10">
-                <Car className="w-10 h-10 text-white" strokeWidth={2} />
+              {/* Risk score strip */}
+              <div
+                className="mx-5 sm:mx-6 mb-5 sm:mb-6 rounded-xl p-4"
+                style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                    Vehicle Risk Score
+                  </span>
+                  <span
+                    className="text-xs font-bold px-2 py-0.5 rounded-full"
+                    style={{ background: 'rgba(34,197,94,0.15)', color: '#4ade80' }}
+                  >
+                    Low Risk
+                  </span>
+                </div>
+                <div className="w-full rounded-full h-2" style={{ background: 'rgba(255,255,255,0.07)' }}>
+                  <div
+                    className="h-2 rounded-full w-4/5"
+                    style={{ background: 'linear-gradient(90deg, #16a34a, #4ade80)' }}
+                  />
+                </div>
+                <div className="flex justify-between mt-1.5">
+                  <span className="text-xs" style={{ color: 'rgba(255,255,255,0.25)' }}>High Risk</span>
+                  <span className="text-xs font-bold" style={{ color: '#4ade80' }}>84 / 100</span>
+                </div>
               </div>
             </div>
-          </div> */}
+
+            {/* Trust indicators */}
+            <div className="grid grid-cols-3 gap-2 sm:gap-3">
+              {[
+                { icon: Shield, label: 'Secure & Private', sub: 'Bank-level encryption' },
+                { icon: Clock, label: 'Instant Results', sub: 'Under 30 seconds' },
+                { icon: Star, label: 'Satisfaction', sub: 'Money-back guarantee' },
+              ].map(({ icon: Icon, label, sub }) => (
+                <div
+                  key={label}
+                  className="rounded-xl p-3 sm:p-4 text-center space-y-1.5"
+                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}
+                >
+                  <div
+                    className="w-7 sm:w-8 h-7 sm:h-8 rounded-lg mx-auto flex items-center justify-center"
+                    style={{ background: 'rgba(120,0,0,0.15)' }}
+                  >
+                    <Icon className="w-3.5 sm:w-4 h-3.5 sm:h-4" style={{ color: '#c0392b' }} />
+                  </div>
+                  <p className="text-xs font-bold text-white">{label}</p>
+                  <p className="text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>{sub}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
       </div>
 
       <GetReportForm
         isOpen={isFormOpen}
         onClose={() => setIsFormOpen(false)}
-        prefilledIdentType={vehicleIdType || undefined}
-        prefilledIdentValue={vehicleIdType === 'vin' ? vin : plateNumber}
+        prefilledIdentType={tab}
+        prefilledIdentValue={tab === 'vin' ? vin : plate}
       />
-
-      {/* Basic Report Modal - PDF Style */}
-      {isBasicReportOpen && basicReportData && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
-            {/* Professional Header with Logo Area */}
-            <div className="bg-gradient-to-r from-slate-900 to-slate-800 px-8 py-8 flex items-start justify-between">
-              <div className="flex-1">
-                <div className="text-blue-400 text-sm font-semibold tracking-widest mb-2">VEHICLE REPORT</div>
-                <h2 className="text-3xl font-bold text-white mb-1">Basic Vehicle Information</h2>
-                <p className="text-slate-400 text-sm">Decoded from VIN Database</p>
-              </div>
-              <button
-                onClick={() => setIsBasicReportOpen(false)}
-                className="text-slate-400 hover:text-white transition flex-shrink-0 mt-1"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-
-            {/* Content */}
-            <div className="p-8 space-y-8">
-              {/* VIN Section */}
-              <div className="border-b-2 border-slate-200 pb-6">
-                <div className="flex items-baseline gap-4">
-                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider w-24">VIN Number</span>
-                  <p className="text-2xl font-mono font-bold text-slate-900">{basicReportData.vin}</p>
-                </div>
-              </div>
-
-              {/* Vehicle Details Grid */}
-              <div>
-                <h3 className="text-sm font-bold text-slate-600 uppercase tracking-widest mb-6 pb-3 border-b border-slate-300">Vehicle Specifications</h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                  {/* Year */}
-                  <div>
-                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">Year</p>
-                    <p className="text-2xl font-bold text-blue-600">{basicReportData.vehicle?.year || 'N/A'}</p>
-                  </div>
-
-                  {/* Make */}
-                  <div>
-                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">Make</p>
-                    <p className="text-2xl font-bold text-slate-900">{basicReportData.vehicle?.make || 'N/A'}</p>
-                  </div>
-
-                  {/* Model */}
-                  <div>
-                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">Model</p>
-                    <p className="text-2xl font-bold text-slate-900">{basicReportData.vehicle?.model || 'N/A'}</p>
-                  </div>
-
-                  {/* Body Type */}
-                  <div>
-                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">Body Type</p>
-                    <p className="text-lg font-semibold text-slate-900">{basicReportData.vehicle?.bodyType || 'N/A'}</p>
-                  </div>
-
-                  {/* Engine */}
-                  <div>
-                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">Engine</p>
-                    <p className="text-lg font-semibold text-slate-900">{basicReportData.vehicle?.engine || 'N/A'}</p>
-                  </div>
-
-                  {/* Fuel Type */}
-                  <div>
-                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">Fuel Type</p>
-                    <p className="text-lg font-semibold text-slate-900">{basicReportData.vehicle?.fuelType || 'N/A'}</p>
-                  </div>
-
-                  {/* Transmission */}
-                  <div>
-                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">Transmission</p>
-                    <p className="text-lg font-semibold text-slate-900">{basicReportData.vehicle?.transmission || 'N/A'}</p>
-                  </div>
-
-                  {/* Drive Type */}
-                  <div>
-                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-2">Drive Type</p>
-                    <p className="text-lg font-semibold text-slate-900">{basicReportData.vehicle?.driveType || 'N/A'}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Information Box */}
-              <div className="bg-blue-50 border-l-4 border-blue-600 p-5 rounded-r">
-                <p className="text-sm text-slate-700 leading-relaxed">
-                  <span className="font-semibold text-blue-900">Information Notice:</span> This report contains basic vehicle information extracted from the National Highway Traffic Safety Administration (NHTSA) VIN decoder database. For a comprehensive vehicle history report including accident records, ownership history, title information, and more, please upgrade to the Full Report.
-                </p>
-              </div>
-
-              {/* CTA Buttons */}
-              <div className="flex gap-4 pt-6 border-t border-slate-200">
-                <button
-                  onClick={() => setIsBasicReportOpen(false)}
-                  className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-900 font-semibold py-3 px-6 rounded transition duration-200"
-                >
-                  Close Report
-                </button>
-                <Link
-                  href="/pricing"
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded transition duration-200 text-center"
-                >
-                  Get Full Report
-                </Link>
-              </div>
-            </div>
-
-            {/* Professional Footer */}
-            <div className="bg-slate-50 px-8 py-4 border-t border-slate-200 text-center text-xs text-slate-500">
-              <p>AutoRevealedVehicle Report • Report Generated from NHTSA Database</p>
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   )
 }

@@ -5,19 +5,25 @@
   "nav_about": "About Us",
   "select_country": "Select country",
   "search_placeholder": "Type to search",
-  "banner_get_report": "Get report",
-  "banner_no_vin": "I don't have a VIN",
-  "banner_input_placeholder": "Enter VIN",
-  "vin_get_report": "Get report",
-  "vin_no_vin_alert": "Please enter a VIN to continue",
-  "vin_placeholder": "1VWBN7A35CCXXXXXX",
-  "form_title": "Get Your Report",
-  "form_cancel": "Cancel",
-  "form_continue": "Continue to Payment",
-  "form_cod": "Cash on Delivery",
-  "payment_complete": "Complete your payment",
-  "banner_title": "Rely on data, not claim check any car’s history instantly.",
+
+  "banner_eyebrow": "Trusted by smart car buyers",
+  "banner_title": "Rely on data, not claims check any car’s history instantly.",
   "banner_subtitle": "Thinking of buying a used car? We scan 900+ global databases to help you make a smart decision.",
+  "banner_search_label": "Start your vehicle history check",
+  "banner_tab_vin": "VIN",
+  "banner_tab_plate": "License plate",
+  "banner_input_placeholder": "Enter VIN",
+  "banner_plate_placeholder": "Enter license plate number",
+  "banner_plate_required": "Please enter a plate number to continue",
+  "banner_get_report": "Get report",
+  "banner_loading": "Loading...",
+  "banner_search_note": "No account required · Secure checkout · Report ready in minutes",
+  "banner_no_vin": "I don't have a VIN",
+
+  "banner_stat_sources": "900+ verified global data sources",
+  "banner_stat_reports": "Millions of reports delivered worldwide",
+  "banner_stat_speed": "Full insights in under 55 seconds",
+
   "banner_we_check": "We check:",
   "banner_checks_damage": "Damage",
   "banner_checks_market_value": "Market value",
@@ -27,8 +33,28 @@
   "banner_checks_title_check": "Title check",
   "banner_checks_safety_ratings": "Safety ratings",
   "banner_checks_natural_disaster": "Natural disaster exposure",
+
   "banner_report_title": "Comprehensive Report",
   "banner_report_subtitle": "Complete vehicle history in seconds",
+
+  "banner_preview_label": "Sample report",
+  "banner_preview_vehicle": "2021 Toyota Camry SE",
+  "banner_preview_title": "Title status",
+  "banner_preview_title_clean": "Clean title",
+  "banner_preview_accidents": "Accidents",
+  "banner_preview_none": "None reported",
+  "banner_preview_disclaimer": "Sample preview only. Your report shows live data for the VIN or plate you enter.",
+
+  "vin_get_report": "Get report",
+  "vin_no_vin_alert": "Please enter a VIN to continue",
+  "vin_placeholder": "1VWBN7A35CCXXXXXX",
+
+  "form_title": "Get Your Report",
+  "form_cancel": "Cancel",
+  "form_continue": "Continue to Payment",
+  "form_cod": "Cash on Delivery",
+  "payment_complete": "Complete your payment",
+
   "features_title": "We check what sellers won't tell you",
   "features_subtitle": "AutoRevealed scans over a billion verified records to help you lower the risk of buying a used car – in just 55 seconds.",
   "feature_spot_damage_title": "Spot damage and write-offs",
@@ -45,18 +71,16 @@
   "feature_safety_desc": "Our Safety ratings data shows crash-test ratings from top agencies, helping you avoid cars with hidden risks.",
   "feature_disasters_title": "Check for weather-related damage",
   "feature_disasters_desc": "Our Natural Disasters data flags cars that may have been exposed to floods, storms, or other natural events – even if the damage is not visible.",
- "why_title": "Why smart buyers always start with AutoRevealed",
-"why_subtitle": "An AutoRevealed vehicle history report helps you make confident decisions by showing what’s worth buying, what’s not, and where you can get the best value.",
 
-"why_section1_title": "Save yourself from costly surprises",
-"why_section1_desc": "Spot hidden damage, rolled-back mileage, and other serious issues before you buy — so you don’t end up paying for someone else’s problems.",
+  "why_title": "Why smart buyers always start with AutoRevealed",
+  "why_subtitle": "An AutoRevealed vehicle history report helps you make confident decisions by showing what’s worth buying, what’s not, and where you can get the best value.",
+  "why_section1_title": "Save yourself from costly surprises",
+  "why_section1_desc": "Spot hidden damage, rolled-back mileage, and other serious issues before you buy — so you don’t end up paying for someone else’s problems.",
+  "why_section2_title": "Choose the right car in less time",
+  "why_section2_desc": "Review a vehicle’s full history online and avoid wasting time on cars that don’t meet your expectations.",
+  "why_section3_title": "Buy with confidence and negotiate better",
+  "why_section3_desc": "Get complete insight into the car’s past, stay informed during negotiations, and make smarter deals with real data.",
 
-"why_section2_title": "Choose the right car in less time",
-"why_section2_desc": "Review a vehicle’s full history online and avoid wasting time on cars that don’t meet your expectations.",
-
-"why_section3_title": "Buy with confidence and negotiate better",
-"why_section3_desc": "Get complete insight into the car’s past, stay informed during negotiations, and make smarter deals with real data.",
-  
   "pricing_simple_title": "Simple, Transparent Pricing",
   "pricing_choose_plan": "Choose Your Plan",
   "pricing_subtitle": "Get instant access to comprehensive vehicle history reports. No hidden fees, cancel anytime.",
@@ -70,6 +94,7 @@
   "trust_money_desc": "30-day guarantee",
   "trust_instant_title": "Instant Access",
   "trust_instant_desc": "Reports in seconds",
+
   "contact_get_in_touch": "Get in Touch",
   "contact_title": "Contact us",
   "contact_subtitle": "Do you have questions concerning our product, your order, or a general matter? Tell us how we can help you.",
@@ -81,6 +106,7 @@
   "contact_send": "Send Message",
   "contact_sending": "Sending...",
   "contact_send_error": "Failed to send message. Please try again.",
+
   "admin_panel": "Admin Panel",
   "admin_dashboard": "Dashboard",
   "admin_orders": "Orders",
@@ -99,6 +125,7 @@
   "status_complete": "Complete",
   "status_refunded": "Refunded",
   "status_cancel": "Cancel",
+
   "email_new_order": "New Order Received",
   "email_order_number": "Order Number",
   "email_customer": "Customer",
@@ -119,6 +146,7 @@
   "email_order_confirmed_subject": "Order Confirmation",
   "email_contact_subject": "Contact Form Submission",
   "email_review_subject": "New Review",
+
   "testimonials_title": "Hear from real car buyers like you",
   "testimonials_subtitle": "See why users trust AutoRevealed to make smarter and safer vehicle decisions.",
   "testimonials_add_review": "Write a Review",
@@ -127,16 +155,19 @@
   "testimonials_reports_generated": "Vehicle Reports Generated",
   "testimonials_verified_review": "Verified Review",
   "testimonials_no_reviews": "No reviews yet. Be the first to share your experience!",
+
   "stats_title": "Turning data into smarter choices",
   "stats_subtitle": "In 2024, we've helped millions of drivers navigate the car market with intelligence and confidence.",
   "stats_vehicles_checked": "Vehicles checked",
   "stats_clocked_found": "Clocked vehicles found",
   "stats_damaged_detected": "Damaged vehicles detected",
+
   "review_write_title": "Write a Review",
   "footer_privacy": "Privacy",
   "footer_terms": "Terms & Conditions",
   "footer_security": "Security",
   "footer_refund": "Refund Policy",
+
   "privacy_title": "Privacy Policy",
   "privacy_intro": "We are committed to protecting your privacy. This page explains what information we collect, how we use it, and your rights.",
   "privacy_collection_title": "Information We Collect",
@@ -147,6 +178,7 @@
   "privacy_security_paragraph": "We apply industry-standard security practices including encryption in transit and at rest, access controls, and regular audits to keep your data safe.",
   "privacy_contact_title": "Contact & Requests",
   "privacy_contact_paragraph": "If you have questions about your data or wish to exercise your rights, contact support via the contact page or email our support team.",
+
   "terms_title": "Terms & Conditions",
   "terms_intro": "These Terms explain the rules and responsibilities when using our services. By using the site you agree to these terms.",
   "terms_user_responsibilities_title": "User Responsibilities",
@@ -155,12 +187,14 @@
   "terms_limitation_paragraph": "We provide information and tools for vehicle history checks; while we strive for accuracy, we do not guarantee completeness and are not liable for indirect damages.",
   "terms_contact_title": "Contact",
   "terms_contact_paragraph": "For questions about these Terms, reach out to our support team via the contact page.",
+
   "security_title": "Security",
   "security_intro": "Protecting the security of our systems and your data is a top priority. Below we summarize our approach.",
   "security_measures_title": "Our Security Measures",
   "security_measures_paragraph": "We use secure hosting, encrypted connections (TLS), regular security testing, and strict internal access controls to safeguard systems and data.",
   "security_contact_title": "Report a Security Issue",
   "security_contact_paragraph": "If you discover a vulnerability, please contact our security team through the contact page with full details so we can investigate promptly.",
+
   "refund_title": "Refund Policy",
   "refund_intro": "We want you to be satisfied. This policy explains how refunds are handled for report purchases.",
   "refund_scope_title": "Scope",
@@ -169,7 +203,9 @@
   "refund_process_paragraph": "To request a refund, contact support with your order number and details. We typically respond within 3 business days and process refunds via the original payment method.",
   "refund_contact_title": "Contact",
   "refund_contact_paragraph": "For refund requests, please use the contact form or email our support team with the order number and issue.",
+
   "copyright": "© {{year}} AutoRevealed. All rights reserved.",
+
   "review_name_label": "Your Name",
   "review_name_placeholder": "John Doe",
   "review_email_label": "Email Address",
@@ -185,6 +221,7 @@
   "review_error_select_rating": "Please select a rating",
   "review_error_submit_failed": "Failed to submit review. Please try again.",
   "review_alert_pending": "Thank you! Your review has been submitted and will be shown on the website once approved by an admin.",
+
   "howitworks_title": "How it works",
   "howitworks_subtitle": "Discover what we check, how quickly it works, and what insights you receive:",
   "howitworks_step1_title": "Enter the vehicle’s VIN number",
@@ -200,6 +237,7 @@
   "howitworks_step4_desc": "Use your AutoRevealed vehicle history report to decide whether to buy, negotiate a better price, or continue searching.",
   "howitworks_step4_link": "View sample report",
   "howitworks_cta": "Get Your Vehicle Report Now",
+
   "chat_welcome": "Hi — I can help with inspection report questions. Ask me anything.",
   "chat_input_placeholder": "Ask about pricing, orders, reports...",
   "chat_error_generic": "Sorry, something went wrong.",

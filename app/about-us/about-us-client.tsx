@@ -73,24 +73,35 @@ export default function AboutUsClient() {
   }, [])
 
   return (
-    <div className="bg-white">
+    <div style={{ background: 'linear-gradient(135deg, #0a0f1e 0%, #0d1b2e 40%, #0a1628 100%)' }} className="min-h-screen">
+
+      {/* Ambient glows */}
+      <div
+        className="absolute top-0 left-1/4 w-96 h-96 rounded-full opacity-10 blur-3xl pointer-events-none"
+        style={{ background: 'radial-gradient(circle, #780000 0%, transparent 70%)' }}
+      />
+      <div
+        className="absolute bottom-0 right-1/4 w-80 h-80 rounded-full opacity-10 blur-3xl pointer-events-none"
+        style={{ background: 'radial-gradient(circle, #1a4a8a 0%, transparent 70%)' }}
+      />
 
       {/* HERO */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-[#780000]/10 via-white to-gray-50">
+      <div className="relative overflow-hidden">
 
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,#78000015,transparent_60%)]" />
+        <div className="container mx-auto px-4 py-20 text-center max-w-4xl relative z-10">
 
-        <div className="container mx-auto px-4 py-20 text-center max-w-4xl">
-
-          <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#780000]/10 text-[#780000] font-semibold border border-[#780000]/20">
+          <span 
+            className="inline-flex items-center gap-2 px-5 py-2 rounded-full font-semibold border"
+            style={{ borderColor: 'rgba(120,0,0,0.5)', background: 'rgba(120,0,0,0.12)', color: '#f87171' }}
+          >
             <Shield size={16} /> About AutoRevealed
           </span>
 
-          <h1 className="text-4xl md:text-6xl font-extrabold mt-6 leading-tight">
-            Driving <span className="text-[#780000]">Trust</span> Through Vehicle Data
+          <h1 className="text-5xl sm:text-6xl xl:text-7xl font-black mt-6 leading-tight text-white">
+            Driving <span style={{ color: '#f87171' }}>Trust</span> Through Vehicle Data
           </h1>
 
-          <p className="text-gray-600 mt-5 text-lg">
+          <p className="mt-5 text-lg" style={{ color: 'rgba(186,220,255,0.6)' }}>
             AutoRevealed is a digital vehicle history platform built to help people make safer,
             smarter, and more transparent car buying decisions.
           </p>
@@ -99,63 +110,73 @@ export default function AboutUsClient() {
       </div>
 
       {/* STATS */}
-      <div className="container mx-auto px-4 py-14">
+      <div className="container mx-auto px-4 py-14 relative z-10">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
 
           {stats.map((s, i) => (
             <div
               key={i}
-              className="group bg-white border border-gray-200 rounded-2xl p-6 text-center shadow-sm hover:shadow-xl hover:border-[#780000]/30 transition-all"
+              className="group rounded-2xl p-6 text-center border transition-all duration-300"
+              style={{
+                background: 'rgba(255,255,255,0.03)',
+                borderColor: 'rgba(120,0,0,0.3)',
+              }}
             >
-              <div className="w-12 h-12 mx-auto rounded-xl bg-[#780000]/10 flex items-center justify-center group-hover:scale-110 transition">
-                <s.icon className="text-[#780000]" />
+              <div 
+                className="w-12 h-12 mx-auto rounded-xl flex items-center justify-center group-hover:scale-110 transition"
+                style={{ background: 'rgba(120,0,0,0.15)' }}
+              >
+                <s.icon style={{ color: '#f87171' }} />
               </div>
 
-              <h2 className="text-3xl font-bold mt-3 text-gray-900">
+              <h2 className="text-3xl font-bold mt-3 text-white">
                 {counters[i]}{s.suffix}
               </h2>
 
-              <p className="text-sm text-gray-600 mt-1">{s.label}</p>
+              <p className="text-sm mt-1" style={{ color: 'rgba(255,255,255,0.5)' }}>{s.label}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* STORY */}
-      <div className="bg-gradient-to-b from-white to-gray-50 py-16">
+      <div className="py-16 relative z-10">
         <div className="container mx-auto px-4 grid lg:grid-cols-2 gap-10 items-center">
 
           <div className="space-y-5">
 
-            <h2 className="text-3xl md:text-5xl font-bold">
-              Why We Built <span className="text-[#780000]">AutoRevealed</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-white">
+              Why We Built <span style={{ color: '#f87171' }}>AutoRevealed</span>
             </h2>
 
-            <p className="text-gray-600 leading-relaxed">
+            <p className="leading-relaxed" style={{ color: 'rgba(255,255,255,0.7)' }}>
               Buying a used car can be risky. Hidden accidents, mileage fraud, and incomplete history
               often lead to financial loss. We created AutoRevealed to solve this problem.
             </p>
 
-            <p className="text-gray-600">
+            <p style={{ color: 'rgba(255,255,255,0.7)' }}>
               Our platform gives you instant access to verified vehicle history reports so you can
               avoid scams and make confident decisions before buying any vehicle.
             </p>
 
             <div className="flex gap-4 pt-2">
-              <div className="flex items-center gap-2 text-gray-700">
-                <Award className="text-[#780000]" /> Trusted Reports
+              <div className="flex items-center gap-2 text-white">
+                <Award style={{ color: '#f87171' }} /> Trusted Reports
               </div>
-              <div className="flex items-center gap-2 text-gray-700">
-                <Heart className="text-[#780000]" /> User Focused
+              <div className="flex items-center gap-2 text-white">
+                <Heart style={{ color: '#f87171' }} /> User Focused
               </div>
             </div>
 
           </div>
 
           <div className="relative">
-            <div className="absolute -inset-4 bg-[#780000]/10 rounded-3xl blur-2xl"></div>
+            <div 
+              className="absolute -inset-4 rounded-3xl blur-2xl"
+              style={{ background: 'rgba(120,0,0,0.2)' }}
+            ></div>
 
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl border">
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl border" style={{ borderColor: 'rgba(120,0,0,0.3)' }}>
               <Image
                 src="/about-car.jpg"
                 alt="About"
@@ -178,13 +199,13 @@ export default function AboutUsClient() {
       </div>
 
       {/* VALUES */}
-      <div className="container mx-auto px-4 py-20">
+      <div className="container mx-auto px-4 py-20 relative z-10">
 
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold">
-            Our <span className="text-[#780000]">Core Values</span>
+          <h2 className="text-4xl font-bold text-white">
+            Our <span style={{ color: '#f87171' }}>Core Values</span>
           </h2>
-          <p className="text-gray-600 mt-3">
+          <p className="mt-3" style={{ color: 'rgba(255,255,255,0.6)' }}>
             The principles that define how we build trust and deliver value
           </p>
         </div>
@@ -194,14 +215,21 @@ export default function AboutUsClient() {
           {values.map((v, i) => (
             <div
               key={i}
-              className="p-6 rounded-2xl border bg-white hover:shadow-xl hover:border-[#780000]/30 transition"
+              className="p-6 rounded-2xl border transition-all"
+              style={{
+                background: 'rgba(255,255,255,0.03)',
+                borderColor: 'rgba(120,0,0,0.3)',
+              }}
             >
-              <div className="w-12 h-12 rounded-xl bg-[#780000]/10 flex items-center justify-center mb-4">
-                <v.icon className="text-[#780000]" />
+              <div 
+                className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+                style={{ background: 'rgba(120,0,0,0.15)' }}
+              >
+                <v.icon style={{ color: '#f87171' }} />
               </div>
 
-              <h3 className="text-xl font-bold">{v.title}</h3>
-              <p className="text-gray-600 mt-2">{v.description}</p>
+              <h3 className="text-xl font-bold text-white">{v.title}</h3>
+              <p className="mt-2" style={{ color: 'rgba(255,255,255,0.6)' }}>{v.description}</p>
             </div>
           ))}
 
@@ -209,17 +237,27 @@ export default function AboutUsClient() {
       </div>
 
       {/* CTA */}
-      <div className="bg-gradient-to-r from-[#780000] to-black py-16 text-center text-white">
+      <div 
+        className="py-16 text-center text-white relative z-10"
+        style={{ background: 'linear-gradient(135deg, #780000, #9b1111)' }}
+      >
 
-        <h2 className="text-3xl md:text-5xl font-bold">
+        <h2 className="text-4xl md:text-5xl font-bold">
           Start Your Vehicle Check Today
         </h2>
 
-        <p className="text-white/80 mt-3">
+        <p className="mt-3" style={{ color: 'rgba(255,255,255,0.8)' }}>
           Get instant reports and protect yourself from risky car purchases
         </p>
 
-        <button className="mt-6 bg-white text-[#780000] hover:bg-gray-200 font-bold px-8 py-3 rounded-xl">
+        <button 
+          className="mt-6 font-bold px-8 py-3 rounded-xl transition-all"
+          style={{
+            background: 'rgba(255,255,255,0.15)',
+            border: '2px solid rgba(255,255,255,0.3)',
+            color: '#fff',
+          }}
+        >
           Get Report Now
         </button>
 

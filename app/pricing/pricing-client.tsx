@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Check, Sparkles, Zap, Crown, Shield, TrendingUp, Clock } from 'lucide-react'
+import { Check, Sparkles, Zap, Crown, Shield, TrendingUp, Clock, ChevronRight } from 'lucide-react'
 import Image from 'next/image'
 import { useCountry } from '@/contexts/CountryContext'
 import { useTranslations } from '@/lib/translations'
@@ -12,18 +12,15 @@ import GetReportForm from '@/components/GetReportForm'
 import { PRICING_MAP, CURRENCY_SYMBOLS, formatCurrency } from '@/lib/prices'
 
 const PRIMARY = "#780000"
+const SECONDARY = "#1a3a6e"
 
 const basePricingPlans = [
   {
     name: 'Premium',
-    badge: 'GOLD',
-    badgeColor: `bg-[${PRIMARY}]`,
+    badge: 'BEST VALUE',
     priceKey: 'premium' as const,
     icon: Crown,
     popular: false,
-    borderColor: `border-[${PRIMARY}]`,
-    iconBg: 'bg-red-50',
-    iconColor: `text-[${PRIMARY}]`,
     features: [
       'All Premium Features',
       'Accident Records',
@@ -40,13 +37,9 @@ const basePricingPlans = [
   {
     name: 'Basic',
     badge: 'MOST POPULAR',
-    badgeColor: 'bg-blue-600',
     priceKey: 'basic' as const,
     icon: Zap,
     popular: true,
-    borderColor: 'border-blue-600',
-    iconBg: 'bg-blue-50',
-    iconColor: 'text-blue-600',
     features: [
       'Accident Records',
       'Theft Records',
@@ -58,14 +51,10 @@ const basePricingPlans = [
   },
   {
     name: 'Standard',
-    badge: 'DIAMOND',
-    badgeColor: 'bg-cyan-500',
+    badge: 'COMPREHENSIVE',
     priceKey: 'standard' as const,
     icon: Sparkles,
     popular: false,
-    borderColor: 'border-cyan-500',
-    iconBg: 'bg-cyan-50',
-    iconColor: 'text-cyan-600',
     features: [
       'Accident Records',
       'Theft Records',
@@ -114,69 +103,133 @@ export default function PricingClient() {
 
   return (
     <>
-      <div ref={sectionRef} className="relative bg-gradient-to-b from-white via-red-50/30 to-white overflow-hidden">
+      <div 
+        ref={sectionRef} 
+        className="relative min-h-screen font-sans overflow-hidden"
+        style={{ background: 'linear-gradient(135deg, #0a0f1e 0%, #0d1b2e 40%, #0a1628 100%)' }}
+      >
+        {/* Subtle grid overlay */}
+        <div
+          className="absolute inset-0 opacity-[0.04] pointer-events-none"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
+            backgroundSize: '60px 60px',
+          }}
+        />
 
-        {/* Glow Background */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-red-200/30 blur-3xl rounded-full"></div>
+        {/* Ambient glows */}
+        <div
+          className="absolute top-0 left-1/4 w-96 h-96 rounded-full opacity-10 blur-3xl pointer-events-none"
+          style={{ background: 'radial-gradient(circle, #780000 0%, transparent 70%)' }}
+        />
+        <div
+          className="absolute bottom-0 right-1/4 w-80 h-80 rounded-full opacity-10 blur-3xl pointer-events-none"
+          style={{ background: 'radial-gradient(circle, #1a4a8a 0%, transparent 70%)' }}
+        />
 
-        <div className="relative container mx-auto px-4 py-20">
+        <div className="relative z-10 container mx-auto px-4 py-16 sm:py-20 md:py-28 max-w-7xl">
 
           {/* Header */}
-          <div className="text-center max-w-3xl mx-auto mb-14">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 border border-red-200 rounded-full mb-4">
-              <Sparkles className="w-4 h-4 text-[${PRIMARY}]" />
-              <span className="text-sm font-semibold text-gray-700">Simple & Transparent Pricing</span>
+          <div className="text-center max-w-4xl mx-auto mb-16">
+            {/* Badge */}
+            <div 
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-semibold tracking-wide uppercase mb-6"
+              style={{ borderColor: 'rgba(120,0,0,0.5)', background: 'rgba(120,0,0,0.12)', color: '#f87171' }}
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              Simple & Transparent Pricing
             </div>
 
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900">
+            <h1 className="text-5xl sm:text-6xl xl:text-7xl font-black leading-[1.08] tracking-tight text-white">
               Choose Your Plan
             </h1>
 
-            <p className="mt-4 text-gray-600 text-lg">
-              Get instant vehicle history reports with trusted data sources.
+            <p className="mt-6 text-lg sm:text-xl leading-relaxed max-w-2xl mx-auto" style={{ color: 'rgba(186,220,255,0.6)' }}>
+              Get instant vehicle history reports with trusted data sources and secure checkout.
             </p>
           </div>
 
           {/* Cards */}
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-6 lg:gap-8 mb-16">
 
             {pricingPlans.map((plan, i) => (
               <div
                 key={i}
                 onMouseEnter={() => setHoveredPlan(i)}
                 onMouseLeave={() => setHoveredPlan(null)}
-                className={`relative rounded-2xl border-2 bg-white transition-all duration-300
-                ${hoveredPlan === i ? 'shadow-2xl scale-105' : 'shadow-md'}
-                ${plan.borderColor}`}
+                className={`relative rounded-2xl border transition-all duration-300 overflow-hidden
+                ${hoveredPlan === i ? 'scale-105 shadow-2xl' : 'shadow-lg'}
+                ${plan.popular ? 'md:scale-105' : ''}`}
+                style={{
+                  background: 'rgba(255,255,255,0.03)',
+                  border: `2px solid ${plan.popular ? 'rgba(42,90,170,0.6)' : 'rgba(120,0,0,0.3)'}`,
+                  backdropFilter: 'blur(20px)',
+                }}
               >
 
                 {/* Badge */}
-                <div className={`absolute top-0 left-0 px-3 py-1 text-xs font-bold text-white ${plan.badgeColor}`}>
-                  {plan.badge}
-                </div>
+                {plan.badge && (
+                  <div 
+                    className={`absolute top-0 left-0 px-4 py-1.5 text-xs font-bold text-white`}
+                    style={{
+                      background: plan.popular 
+                        ? 'linear-gradient(135deg, #2a5aaa, #1a3a6e)' 
+                        : 'linear-gradient(135deg, #780000, #9b1111)'
+                    }}
+                  >
+                    {plan.badge}
+                  </div>
+                )}
 
-                <div className="p-8 text-center">
+                <div className="p-8 sm:p-10 text-center">
 
                   {/* Icon */}
-                  <div className={`w-14 h-14 mx-auto rounded-xl flex items-center justify-center mb-4 ${plan.iconBg}`}>
-                    <plan.icon className={`w-7 h-7 ${plan.iconColor}`} />
+                  <div 
+                    className={`w-16 h-16 mx-auto rounded-xl flex items-center justify-center mb-6`}
+                    style={{
+                      background: plan.popular 
+                        ? 'rgba(42,90,170,0.15)' 
+                        : 'rgba(120,0,0,0.15)'
+                    }}
+                  >
+                    <plan.icon 
+                      className="w-8 h-8" 
+                      style={{
+                        color: plan.popular ? '#60a5fa' : '#f87171'
+                      }} 
+                    />
                   </div>
 
-                  <h3 className="text-2xl font-bold">{plan.name}</h3>
+                  <h3 className="text-2xl sm:text-3xl font-bold text-white">{plan.name}</h3>
 
-                  <div className="mt-4">
-                    <span className="text-xl font-semibold">{plan.currency}</span>
-                    <span className="text-5xl font-bold">{plan.price}</span>
+                  <div className="mt-6">
+                    <span className="text-2xl font-semibold" style={{ color: 'rgba(255,255,255,0.6)' }}>{plan.currency}</span>
+                    <span className="text-6xl sm:text-7xl font-black text-white ml-1">{plan.price}</span>
                   </div>
 
-                  <p className="text-sm text-gray-500 mt-2">One-time payment</p>
+                  <p className="text-sm mt-2" style={{ color: 'rgba(255,255,255,0.4)' }}>One-time payment</p>
 
                   {/* Features */}
-                  <div className="mt-6 space-y-2 text-left">
+                  <div className="mt-8 space-y-3 text-left mb-10">
                     {plan.features.map((f, idx) => (
-                      <div key={idx} className="flex items-center gap-2">
-                        <Check className="w-4 h-4 text-[${PRIMARY}]" />
-                        <span className="text-sm text-gray-700">{f}</span>
+                      <div key={idx} className="flex items-center gap-3">
+                        <div 
+                          className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center"
+                          style={{
+                            background: plan.popular 
+                              ? 'rgba(42,90,170,0.2)' 
+                              : 'rgba(120,0,0,0.2)'
+                          }}
+                        >
+                          <Check 
+                            className="w-3.5 h-3.5" 
+                            style={{
+                              color: plan.popular ? '#60a5fa' : '#f87171'
+                            }}
+                          />
+                        </div>
+                        <span className="text-sm" style={{ color: 'rgba(255,255,255,0.8)' }}>{f}</span>
                       </div>
                     ))}
                   </div>
@@ -184,10 +237,19 @@ export default function PricingClient() {
                   {/* Button */}
                   <button
                     onClick={() => handleSelectPlan(plan.priceKey)}
-                    className={`mt-6 w-full py-3 rounded-xl font-semibold text-white transition-all
-                    ${plan.popular ? 'bg-blue-600 hover:bg-blue-700' : 'bg-[#780000] hover:bg-[#5a0000]'}`}
+                    className={`w-full py-3 sm:py-4 rounded-xl font-bold text-sm sm:text-base tracking-wide flex items-center justify-center gap-2 transition-all duration-200`}
+                    style={{
+                      background: plan.popular
+                        ? 'linear-gradient(135deg, #2a5aaa, #1a3a6e)'
+                        : 'linear-gradient(135deg, #780000, #9b1111)',
+                      color: '#fff',
+                      boxShadow: plan.popular
+                        ? '0 8px 30px rgba(42,90,170,0.4)'
+                        : '0 8px 30px rgba(120,0,0,0.4)'
+                    }}
                   >
                     {plan.buttonText}
+                    <ChevronRight className="w-4 h-4" />
                   </button>
 
                 </div>
@@ -196,11 +258,24 @@ export default function PricingClient() {
 
           </div>
 
-          {/* Note */}
-          <div className="text-center mt-12 text-gray-600 text-sm space-y-2">
-            <p>✔ One-time payment only — no subscriptions</p>
-            <p>✔ 14-day money-back guarantee</p>
-            <p>✔ Instant digital delivery</p>
+          {/* Features comparison note */}
+          <div 
+            className="rounded-2xl p-8 text-center max-w-2xl mx-auto"
+            style={{
+              background: 'rgba(255,255,255,0.03)',
+              border: '1px solid rgba(255,255,255,0.06)',
+              backdropFilter: 'blur(20px)'
+            }}
+          >
+            <div className="space-y-3">
+              <p className="text-white font-semibold">Why Choose Premium?</p>
+              <p style={{ color: 'rgba(255,255,255,0.6)' }} className="text-sm">
+                ✔ One-time payment only — no subscriptions<br/>
+                ✔ 14-day money-back guarantee<br/>
+                ✔ Instant digital delivery<br/>
+                ✔ Bank-level encryption & secure checkout
+              </p>
+            </div>
           </div>
 
         </div>

@@ -72,28 +72,38 @@ export default function ContactUsClient() {
   }
 
   return (
-    <div className="relative overflow-hidden bg-white">
+    <div 
+      className="relative overflow-hidden min-h-screen"
+      style={{ background: 'linear-gradient(135deg, #0a0f1e 0%, #0d1b2e 40%, #0a1628 100%)' }}
+    >
 
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#780000]/10 via-white to-[#780000]/5"></div>
+      {/* Ambient glows */}
+      <div
+        className="absolute top-0 left-1/4 w-96 h-96 rounded-full opacity-10 blur-3xl pointer-events-none"
+        style={{ background: 'radial-gradient(circle, #780000 0%, transparent 70%)' }}
+      />
+      <div
+        className="absolute bottom-0 right-1/4 w-80 h-80 rounded-full opacity-10 blur-3xl pointer-events-none"
+        style={{ background: 'radial-gradient(circle, #1a4a8a 0%, transparent 70%)' }}
+      />
 
-      <div className="absolute -top-20 left-10 w-96 h-96 bg-[#780000]/20 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 right-10 w-96 h-96 bg-red-200/40 rounded-full blur-3xl"></div>
-
-      <div ref={heroRef} className="relative container mx-auto px-4 py-16">
+      <div ref={heroRef} className="relative container mx-auto px-4 py-16 z-10">
 
         {/* HEADER */}
         <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-5 py-2 bg-[#780000]/10 border border-[#780000]/20 rounded-full text-[#780000] font-semibold">
+          <div 
+            className="inline-flex items-center gap-2 px-5 py-2 rounded-full border font-semibold"
+            style={{ borderColor: 'rgba(120,0,0,0.5)', background: 'rgba(120,0,0,0.12)', color: '#f87171' }}
+          >
             <MessageCircle size={16} />
             Get in Touch
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-extrabold mt-6 text-gray-900">
-            Contact <span className="text-[#780000]">AutoRevealed</span>
+          <h1 className="text-5xl sm:text-6xl xl:text-7xl font-black mt-6 text-white">
+            Contact <span style={{ color: '#f87171' }}>AutoRevealed</span>
           </h1>
 
-          <p className="text-gray-600 mt-4 text-lg">
+          <p className="mt-4 text-lg" style={{ color: 'rgba(186,220,255,0.6)' }}>
             We’re here to help you with vehicle history reports & support anytime.
           </p>
         </div>
@@ -103,16 +113,25 @@ export default function ContactUsClient() {
           {contactInfo.map((item, i) => (
             <div
               key={i}
-              className="group bg-white rounded-2xl p-6 border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+              className="group rounded-2xl p-6 border transition-all duration-300"
+              style={{
+                background: 'rgba(255,255,255,0.03)',
+                borderColor: 'rgba(120,0,0,0.3)',
+              }}
             >
-              <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${item.gradient} flex items-center justify-center text-white`}>
+              <div 
+                className="w-12 h-12 rounded-xl flex items-center justify-center text-white"
+                style={{
+                  background: item.gradient
+                }}
+              >
                 <item.icon />
               </div>
 
-              <h3 className="text-xl font-bold mt-4 text-gray-900">{item.title}</h3>
+              <h3 className="text-xl font-bold mt-4 text-white">{item.title}</h3>
 
               {item.details.map((d, idx) => (
-                <p key={idx} className="text-gray-600 text-sm mt-1">
+                <p key={idx} className="text-sm mt-1" style={{ color: 'rgba(255,255,255,0.6)' }}>
                   {d}
                 </p>
               ))}
@@ -121,13 +140,16 @@ export default function ContactUsClient() {
         </div>
 
         {/* FORM */}
-        <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+        <div className="max-w-4xl mx-auto rounded-3xl shadow-2xl border overflow-hidden" style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(120,0,0,0.3)' }}>
 
-          <div className="bg-gradient-to-r from-[#780000] to-black text-white p-6 md:p-10">
+          <div 
+            className="text-white p-6 md:p-10"
+            style={{ background: 'linear-gradient(135deg, #780000, #9b1111)' }}
+          >
             <h2 className="text-2xl md:text-3xl font-bold">
               Send us a message
             </h2>
-            <p className="text-white/80 mt-2 text-sm">
+            <p className="mt-2 text-sm" style={{ color: 'rgba(255,255,255,0.8)' }}>
               We usually respond within 2–4 hours
             </p>
           </div>
@@ -139,13 +161,14 @@ export default function ContactUsClient() {
                 placeholder="Your Name"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="focus:ring-[#780000]"
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:ring-[#780000]"
               />
 
               <Input
                 placeholder="Your Email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/40"
               />
             </div>
 
@@ -153,27 +176,31 @@ export default function ContactUsClient() {
               placeholder="Subject"
               value={formData.subject}
               onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+              className="bg-white/10 border-white/20 text-white placeholder:text-white/40"
             />
 
             <Textarea
               placeholder="Your Message"
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-              className="min-h-[140px]"
+              className="min-h-[140px] bg-white/10 border-white/20 text-white placeholder:text-white/40"
             />
 
             {submitSuccess && (
-              <p className="text-green-600 font-medium">Message sent successfully!</p>
+              <p className="text-green-400 font-medium">Message sent successfully!</p>
             )}
 
             {submitError && (
-              <p className="text-red-600">{submitError}</p>
+              <p className="text-red-400">{submitError}</p>
             )}
 
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-[#780000] hover:bg-black text-white py-3 rounded-xl text-lg font-semibold transition-all"
+              className="w-full text-white py-3 rounded-xl text-lg font-semibold transition-all"
+              style={{
+                background: 'linear-gradient(135deg, #780000, #9b1111)',
+              }}
             >
               <Send className="mr-2" size={18} />
               {isSubmitting ? 'Sending...' : 'Send Message'}
