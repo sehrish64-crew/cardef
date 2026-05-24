@@ -10,12 +10,11 @@ export default function WhatsAppFab() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Chat on WhatsApp"
-                className="fixed z-50 right-5 bottom-5 w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-105"
+                className="fixed z-50 right-4 bottom-4 w-10 h-10 sm:w-14 sm:h-14 rounded-full shadow-lg flex items-center justify-center transition-transform hover:scale-105"
                 style={{ backgroundColor: '#fff' }}
             >
                 <svg
-                    width="64px"
-                    height="64px"
+                    className="w-6 h-6 sm:w-10 sm:h-10"
                     viewBox="0 0 48 48"
                     version="1.1"
                     xmlns="http://www.w3.org/2000/svg"

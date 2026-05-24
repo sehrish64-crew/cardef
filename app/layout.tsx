@@ -6,8 +6,6 @@ import { Inter } from 'next/font/google';
 import LayoutWrapper from '@/components/LayoutWrapper';
 import Script from 'next/script';
 import WhatsAppFab from '@/components/WhatsAppFab';
-// PaddleInit moved out of global layout so it doesn't render on all pages (e.g. Pricing).
-// Keep Paddle script in head and mount PaddleInit only on the dedicated checkout page.
 import { getOrganizationSchema } from '@/lib/schema';
 
 const inter = Inter({

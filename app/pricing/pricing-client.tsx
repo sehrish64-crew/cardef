@@ -8,7 +8,6 @@ import { useTranslations } from '@/lib/translations'
 import HowItWorks from '@/components/HowItWorks'
 import Testimonials from '@/components/Testimonials'
 import GetReportForm from '@/components/GetReportForm'
-
 import { PRICING_MAP, CURRENCY_SYMBOLS, formatCurrency } from '@/lib/prices'
 
 const PRIMARY = "#780000"
@@ -103,8 +102,8 @@ export default function PricingClient() {
 
   return (
     <>
-      <div 
-        ref={sectionRef} 
+      <div
+        ref={sectionRef}
         className="relative min-h-screen font-sans overflow-hidden"
         style={{ background: 'linear-gradient(135deg, #0a0f1e 0%, #0d1b2e 40%, #0a1628 100%)' }}
       >
@@ -133,7 +132,7 @@ export default function PricingClient() {
           {/* Header */}
           <div className="text-center max-w-4xl mx-auto mb-16">
             {/* Badge */}
-            <div 
+            <div
               className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-semibold tracking-wide uppercase mb-6"
               style={{ borderColor: 'rgba(120,0,0,0.5)', background: 'rgba(120,0,0,0.12)', color: '#f87171' }}
             >
@@ -151,7 +150,7 @@ export default function PricingClient() {
           </div>
 
           {/* Cards */}
-          <div className="grid md:grid-cols-3 gap-6 lg:gap-8 mb-16">
+          <div className="grid md:grid-cols-3 gap-4 lg:gap-6 mb-14">
 
             {pricingPlans.map((plan, i) => (
               <div
@@ -170,11 +169,11 @@ export default function PricingClient() {
 
                 {/* Badge */}
                 {plan.badge && (
-                  <div 
+                  <div
                     className={`absolute top-0 left-0 px-4 py-1.5 text-xs font-bold text-white`}
                     style={{
-                      background: plan.popular 
-                        ? 'linear-gradient(135deg, #2a5aaa, #1a3a6e)' 
+                      background: plan.popular
+                        ? 'linear-gradient(135deg, #2a5aaa, #1a3a6e)'
                         : 'linear-gradient(135deg, #780000, #9b1111)'
                     }}
                   >
@@ -182,54 +181,54 @@ export default function PricingClient() {
                   </div>
                 )}
 
-                <div className="p-8 sm:p-10 text-center">
+                <div className="p-5 sm:p-7 text-center">
 
                   {/* Icon */}
-                  <div 
-                    className={`w-16 h-16 mx-auto rounded-xl flex items-center justify-center mb-6`}
+                  <div
+                    className={`w-14 h-14 sm:w-16 sm:h-16 mx-auto rounded-xl flex items-center justify-center mb-5`}
                     style={{
-                      background: plan.popular 
-                        ? 'rgba(42,90,170,0.15)' 
+                      background: plan.popular
+                        ? 'rgba(42,90,170,0.15)'
                         : 'rgba(120,0,0,0.15)'
                     }}
                   >
-                    <plan.icon 
-                      className="w-8 h-8" 
+                    <plan.icon
+                      className="w-6 h-6 sm:w-8 sm:h-8"
                       style={{
                         color: plan.popular ? '#60a5fa' : '#f87171'
-                      }} 
+                      }}
                     />
                   </div>
 
-                  <h3 className="text-2xl sm:text-3xl font-bold text-white">{plan.name}</h3>
+                  <h3 className="text-xl sm:text-2xl font-bold text-white">{plan.name}</h3>
 
-                  <div className="mt-6">
-                    <span className="text-2xl font-semibold" style={{ color: 'rgba(255,255,255,0.6)' }}>{plan.currency}</span>
-                    <span className="text-6xl sm:text-7xl font-black text-white ml-1">{plan.price}</span>
+                  <div className="mt-5">
+                    <span className="text-xl sm:text-2xl font-semibold" style={{ color: 'rgba(255,255,255,0.6)' }}>{plan.currency}</span>
+                    <span className="text-5xl sm:text-6xl font-black text-white ml-1">{plan.price}</span>
                   </div>
 
                   <p className="text-sm mt-2" style={{ color: 'rgba(255,255,255,0.4)' }}>One-time payment</p>
 
                   {/* Features */}
-                  <div className="mt-8 space-y-3 text-left mb-10">
+                  <div className="mt-7 space-y-2 text-left mb-8">
                     {plan.features.map((f, idx) => (
-                      <div key={idx} className="flex items-center gap-3">
-                        <div 
+                      <div key={idx} className="flex items-start gap-3">
+                        <div
                           className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center"
                           style={{
-                            background: plan.popular 
-                              ? 'rgba(42,90,170,0.2)' 
+                            background: plan.popular
+                              ? 'rgba(42,90,170,0.2)'
                               : 'rgba(120,0,0,0.2)'
                           }}
                         >
-                          <Check 
-                            className="w-3.5 h-3.5" 
+                          <Check
+                            className="w-3.5 h-3.5"
                             style={{
                               color: plan.popular ? '#60a5fa' : '#f87171'
                             }}
                           />
                         </div>
-                        <span className="text-sm" style={{ color: 'rgba(255,255,255,0.8)' }}>{f}</span>
+                        <span className="text-xs sm:text-sm" style={{ color: 'rgba(255,255,255,0.8)' }}>{f}</span>
                       </div>
                     ))}
                   </div>
@@ -237,7 +236,7 @@ export default function PricingClient() {
                   {/* Button */}
                   <button
                     onClick={() => handleSelectPlan(plan.priceKey)}
-                    className={`w-full py-3 sm:py-4 rounded-xl font-bold text-sm sm:text-base tracking-wide flex items-center justify-center gap-2 transition-all duration-200`}
+                    className={`w-full py-2.5 sm:py-3 rounded-xl font-bold text-xs sm:text-sm tracking-wide flex items-center justify-center gap-2 transition-all duration-200`}
                     style={{
                       background: plan.popular
                         ? 'linear-gradient(135deg, #2a5aaa, #1a3a6e)'
@@ -259,7 +258,7 @@ export default function PricingClient() {
           </div>
 
           {/* Features comparison note */}
-          <div 
+          <div
             className="rounded-2xl p-8 text-center max-w-2xl mx-auto"
             style={{
               background: 'rgba(255,255,255,0.03)',
@@ -268,12 +267,14 @@ export default function PricingClient() {
             }}
           >
             <div className="space-y-3">
-              <p className="text-white font-semibold">Why Choose Premium?</p>
-              <p style={{ color: 'rgba(255,255,255,0.6)' }} className="text-sm">
-                ✔ One-time payment only — no subscriptions<br/>
-                ✔ 14-day money-back guarantee<br/>
-                ✔ Instant digital delivery<br/>
-                ✔ Bank-level encryption & secure checkout
+              {/* <p className="text-white font-semibold">Why Choose Premium?</p> */}
+              <p style={{ color: 'rgba(255,255,255,0.6)' }} className="text-sm flex justify-center items-start gap-2">
+                ✔ One-time payment only — no subscriptions<br />
+
+                ✔ Bank-level encryption & secure checkout <br />
+                ✔ 14-day money-back guarantee<br />
+                ✔ Instant digital delivery
+
               </p>
             </div>
           </div>

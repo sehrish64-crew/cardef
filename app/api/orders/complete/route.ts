@@ -21,22 +21,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Order not found' }, { status: 404 })
     }
 
-    // Optional: verify Paddle payment if Paddle credentials are configured
+    // Optional: verify payment provider data if credentials are configured.
     try {
-      const PADDLE_VENDOR_ID = process.env.PADDLE_VENDOR_ID
-      const PADDLE_API_KEY = process.env.PADDLE_API_KEY
+      const paymentProviderId = process.env.PAYMENT_PROVIDER_ID
+      const paymentApiKey = process.env.PAYMENT_API_KEY
 
-      // If a payment provider is used, we can optionally verify using Paddle checks or webhooks.
-      // For stronger guarantees, rely on Paddle webhooks to mark the order completed.
-      // Here we attempt a best-effort verification if Paddle API credentials are available.
-
-      if (PADDLE_VENDOR_ID && PADDLE_API_KEY && paymentId) {
-        // Example: we could attempt to call the Paddle API to verify transaction details, but
-        // the Vendor API does not provide a direct single-transaction lookup without using
-        // Transaction endpoints that require vendor credentials. This is left as an optional step.
+      // If a payment provider is used, we can optionally verify transaction details here.
+      if (paymentProviderId && paymentApiKey && paymentId) {
+        // Example: call the payment provider API to verify transaction details.
       }
     } catch (err) {
-      console.warn('Paddle verification step failed, proceeding without verification:', err)
+      console.warn('Payment verification step failed, proceeding without verification:', err)
     }
 
     // Update order in database

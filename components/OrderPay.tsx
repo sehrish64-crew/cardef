@@ -1,26 +1,45 @@
-"use client"
+import { formatCurrency } from '@/lib/prices'
 
-import React from 'react'
-import BuyButton from './BuyButton'
+type OrderPayProps = {
+  order: {
+    order_number?: string
+    package_type?: string
+    currency?: string
+    amount?: number
+  }
+}
 
-export default function OrderPay({ priceId, currency, amount }: { priceId?: string; currency?: string; amount?: number | string }) {
-  const displayAmount = amount ? Number(amount).toFixed(2) : ''
+export default function OrderPay({ order }: OrderPayProps) {
+  const amountText = order.amount
+    ? formatCurrency(order.amount, order.currency || 'USD')
+    : 'Amount unavailable'
 
   return (
-    <div className="mt-6 text-center">
-      <div className="mb-3 text-sm text-gray-700">Pay with Paddle</div>
-      {priceId ? (
-        <div className="inline-block">
-          <BuyButton priceId={priceId} quantity={1}>
-            <div className="flex items-center gap-2 px-6 py-3">
-              <span className="text-sm">Pay</span>
-              <span className="font-semibold">{currency} {displayAmount}</span>
-            </div>
-          </BuyButton>
+    <div className="rounded-3xl border border-slate-200/80 bg-white/95 p-8 shadow-lg">
+      <div className="mb-6">
+        <p className="text-sm font-medium text-slate-500">Order summary</p>
+        <h2 className="mt-2 text-2xl font-semibold text-slate-900">Order #{order.order_number || 'N/A'}</h2>
+      </div>
+
+      <div className="space-y-4 text-slate-700">
+        <div className="rounded-2xl bg-slate-50 p-4">
+          <p className="text-sm text-slate-500">Package</p>
+          <p className="mt-1 font-semibold text-slate-900">{order.package_type || 'Standard'}</p>
         </div>
-      ) : (
-        <div className="text-sm text-red-600">Payment not available for this package.</div>
-      )}
+        <div className="rounded-2xl bg-slate-50 p-4">
+          <p className="text-sm text-slate-500">Total</p>
+          <p className="mt-1 text-xl font-semibold text-slate-900">{amountText}</p>
+        </div>
+      </div>
+
+      <div className="mt-8 rounded-2xl bg-blue-50 p-5 text-slate-700">
+        <p className="font-semibold text-slate-900">Payment integration is currently disabled</p>
+        <p className="mt-2 text-sm leading-6">
+          We have removed the previous Paddle checkout flow. Your order has been created and will be processed manually.
+          Please contact support for payment instructions or if you have any questions.
+        </p>
+        <p className="mt-4 text-sm text-slate-600">Support: <a href="mailto:info@carreaders.com" className="font-medium text-blue-600 underline">info@carreaders.com</a></p>
+      </div>
     </div>
   )
 }

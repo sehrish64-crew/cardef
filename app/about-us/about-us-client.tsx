@@ -73,7 +73,7 @@ export default function AboutUsClient() {
   }, [])
 
   return (
-    <div style={{ background: 'linear-gradient(135deg, #0a0f1e 0%, #0d1b2e 40%, #0a1628 100%)' }} className="min-h-screen">
+    <div style={{ background: 'linear-gradient(135deg, #0a0f1e 0%, #0d1b2e 40%, #0a1628 100%)' }} className="min-h-screen relative overflow-hidden">
 
       {/* Ambient glows */}
       <div
@@ -88,20 +88,20 @@ export default function AboutUsClient() {
       {/* HERO */}
       <div className="relative overflow-hidden">
 
-        <div className="container mx-auto px-4 py-20 text-center max-w-4xl relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 py-14 sm:py-20 text-center max-w-4xl relative z-10">
 
           <span 
-            className="inline-flex items-center gap-2 px-5 py-2 rounded-full font-semibold border"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full font-semibold border text-xs sm:text-sm"
             style={{ borderColor: 'rgba(120,0,0,0.5)', background: 'rgba(120,0,0,0.12)', color: '#f87171' }}
           >
             <Shield size={16} /> About Carreaders
           </span>
 
-          <h1 className="text-5xl sm:text-6xl xl:text-7xl font-black mt-6 leading-tight text-white">
+          <h1 className="text-4xl sm:text-5xl xl:text-6xl font-black mt-6 leading-tight text-white">
             Driving <span style={{ color: '#f87171' }}>Trust</span> Through Vehicle Data
           </h1>
 
-          <p className="mt-5 text-lg" style={{ color: 'rgba(186,220,255,0.6)' }}>
+          <p className="mt-5 text-base sm:text-lg leading-relaxed" style={{ color: 'rgba(186,220,255,0.6)' }}>
             Carreaders is a digital vehicle history platform built to help people make safer,
             smarter, and more transparent car buying decisions.
           </p>
@@ -110,13 +110,13 @@ export default function AboutUsClient() {
       </div>
 
       {/* STATS */}
-      <div className="container mx-auto px-4 py-14 relative z-10">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+      <div className="container mx-auto px-4 sm:px-6 py-12 sm:py-14 relative z-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5">
 
           {stats.map((s, i) => (
             <div
               key={i}
-              className="group rounded-2xl p-6 text-center border transition-all duration-300"
+              className="group rounded-2xl p-5 sm:p-6 text-center border transition-all duration-300"
               style={{
                 background: 'rgba(255,255,255,0.03)',
                 borderColor: 'rgba(120,0,0,0.3)',
@@ -140,8 +140,8 @@ export default function AboutUsClient() {
       </div>
 
       {/* STORY */}
-      <div className="py-16 relative z-10">
-        <div className="container mx-auto px-4 grid lg:grid-cols-2 gap-10 items-center">
+      <div className="py-16 sm:py-20 relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
 
           <div className="space-y-5">
 
@@ -159,7 +159,7 @@ export default function AboutUsClient() {
               avoid scams and make confident decisions before buying any vehicle.
             </p>
 
-            <div className="flex gap-4 pt-2">
+            <div className="flex flex-col sm:flex-row gap-4 pt-2 justify-center sm:justify-start">
               <div className="flex items-center gap-2 text-white">
                 <Award style={{ color: '#f87171' }} /> Trusted Reports
               </div>
@@ -182,7 +182,7 @@ export default function AboutUsClient() {
                 alt="About"
                 width={800}
                 height={500}
-                className="object-cover"
+                className="w-full h-auto object-cover"
               />
 
               <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/70 p-6 text-white">
@@ -199,7 +199,7 @@ export default function AboutUsClient() {
       </div>
 
       {/* VALUES */}
-      <div className="container mx-auto px-4 py-20 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 py-16 sm:py-20 relative z-10">
 
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-white">
@@ -210,7 +210,7 @@ export default function AboutUsClient() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
           {values.map((v, i) => (
             <div
@@ -238,7 +238,7 @@ export default function AboutUsClient() {
 
       {/* CTA */}
       <div 
-        className="py-16 text-center text-white relative z-10"
+        className="py-14 sm:py-16 text-center text-white relative z-10"
         style={{ background: 'linear-gradient(135deg, #780000, #9b1111)' }}
       >
 
@@ -251,7 +251,7 @@ export default function AboutUsClient() {
         </p>
 
         <button 
-          className="mt-6 font-bold px-8 py-3 rounded-xl transition-all"
+          className="mt-6 w-full sm:w-auto font-bold px-8 py-3 rounded-xl transition-all"
           style={{
             background: 'rgba(255,255,255,0.15)',
             border: '2px solid rgba(255,255,255,0.3)',

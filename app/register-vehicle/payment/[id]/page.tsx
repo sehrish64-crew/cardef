@@ -1,11 +1,10 @@
 "use client"
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Check } from 'lucide-react'
 import { useCountry } from '@/contexts/CountryContext'
-import { parseJsonSafe } from '@/lib/utils'
 
 export default function PaymentPage() {
   const params = useParams()
@@ -22,47 +21,7 @@ export default function PaymentPage() {
     setError('')
 
     try {
-      // Check if Paddle is available
-      if (!window.Paddle) {
-        throw new Error('Payment system not available. Please refresh the page.')
-      }
-
-      // Get checkout items or create payment intent
-      const response = await fetch('/api/vehicle-registration/payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          registrationId,
-          price: registrationPrice,
-          currency: selectedCountry.currency,
-        }),
-      })
-
-      let data
-      try {
-        data = await parseJsonSafe(response)
-      } catch (err) {
-        console.error('Failed to parse payment response:', err)
-        throw new Error('Invalid response from payment server')
-      }
-
-      if (!response.ok) {
-        throw new Error(data?.error || 'Failed to initiate payment')
-      }
-
-      // Open Paddle checkout
-      window.Paddle?.Checkout.open({
-        items: [{ priceId: data.priceId }],
-        customData: {
-          registrationId: registrationId,
-        },
-      })
-
-      // After a delay, redirect to success page
-      // In production, you'd verify payment via webhook
-      setTimeout(() => {
-        router.push(`/register-vehicle/success/${registrationId}`)
-      }, 3000)
+      setError('Payment integration has been removed. Please contact support to complete registration payment.')
     } catch (err) {
       console.error('Payment error:', err)
       setError(err instanceof Error ? err.message : 'Payment failed')
@@ -161,7 +120,7 @@ export default function PaymentPage() {
           </div>
 
           <p className="text-center text-sm text-gray-500 mt-4">
-            Secure payment powered by Paddle
+            Payment integration has been removed. Please contact support to complete this step.
           </p>
         </div>
       </div>

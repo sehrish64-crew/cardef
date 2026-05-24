@@ -1,7 +1,6 @@
 import { getOrderById, getOrderByNumber } from '@/lib/database'
 import CheckoutSummary from '@/components/CheckoutSummary'
 import OrderPay from '@/components/OrderPay'
-import { getPaddlePriceId } from '@/lib/prices'
 
 export default async function CheckoutPage({ params }: { params: Promise<{ orderId: string }> }) {
   // In Next.js 13+, params is now a Promise
@@ -61,9 +60,8 @@ export default async function CheckoutPage({ params }: { params: Promise<{ order
         <div className="max-w-xl mx-auto">
           <CheckoutSummary order={order} />
 
-          {/* Compute Paddle priceId on the server and pass to client pay button */}
           <div className="mt-4">
-            <OrderPay priceId={getPaddlePriceId((order.package_type || 'standard') as any)} currency={order.currency} amount={order.amount} />
+            <OrderPay order={order} />
           </div>
         </div>
       </div>

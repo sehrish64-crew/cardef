@@ -63,7 +63,7 @@ export default function TermsPageClient() {
 
           <section>
             <h2 className="text-2xl font-semibold text-gray-900">6. Pricing and Payment</h2>
-            <p className="mt-3">Pricing for our services is displayed on our website. All prices are in USD and are subject to change without notice. Payment is processed securely through our authorized payment processor, Paddle. By purchasing a report, you agree to pay the stated price and authorize the charge to your payment method.</p>
+            <p className="mt-3">Pricing for our services is displayed on our website. All prices are in USD and are subject to change without notice. Payment is processed securely through our authorized payment processor. By purchasing a report, you agree to pay the stated price and authorize the charge to your payment method.</p>
           </section>
 
           <section>

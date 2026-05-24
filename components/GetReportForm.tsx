@@ -5,7 +5,7 @@ import { X, Key, Hash, HelpCircle, ChevronRight, Shield, Mail, Car, AlertCircle 
 import { useCountry } from '@/contexts/CountryContext'
 import countriesList from '@/lib/countries'
 import { useTranslations } from '@/lib/translations'
-import { getPrice, formatCurrency, getPaddlePriceId } from '@/lib/prices'
+import { getPrice, formatCurrency } from '@/lib/prices'
 
 interface GetReportFormProps {
   isOpen: boolean
@@ -73,9 +73,6 @@ export default function GetReportForm({
     setIsSubmitting(true)
 
     try {
-      const priceId = getPaddlePriceId(selectedPackage as any)
-      if (!priceId) throw new Error('No Paddle price configured')
-
       const requestBody = {
         customer_email: customerEmail,
         vehicle_type: vehicleType,
@@ -86,7 +83,7 @@ export default function GetReportForm({
         country_code: selectedCountryCode,
         currency: selectedCountry.currency,
         amount: getPrice(selectedPackage as any, selectedCountry.currency),
-        paymentProvider: `paddle:${priceId}`,
+        paymentProvider: null,
       }
 
       const res = await fetch('/api/orders/create', {
@@ -97,23 +94,13 @@ export default function GetReportForm({
       const data = await res.json()
       if (!res.ok || !data.orderId) throw new Error(data.error || 'Order creation failed')
 
-      const w = window as any
-      if (!w.Paddle?.Checkout?.open) throw new Error('Paddle SDK not ready. Please wait and try again.')
-
-      w.Paddle.Checkout.open({
-        items: [{ priceId, quantity: 1 }],
-        customer: { email: customerEmail },
-        customData: { orderId: String(data.orderId), orderNumber: String(data.orderNumber) },
-        settings: {
-          displayMode: 'overlay',
-          theme: 'light',
-          locale: selectedCountry.language === 'it' ? 'it' : 'en',
-        },
-      })
-
-      onClose()
+      if (data.orderId) {
+        window.location.href = `/checkout/${data.orderId}`
+      } else {
+        onClose()
+      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to process payment. Please try again.')
+      setError(err instanceof Error ? err.message : 'Failed to create order. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
@@ -375,7 +362,7 @@ export default function GetReportForm({
                 ) : (
                   <>
                     <Shield className="w-4 h-4" />
-                    Continue to Payment
+                    Submit Order
                     {selectedPackage && ` — ${formatCurrency(getPrice(selectedPackage as any, selectedCountry.currency), selectedCountry.currency)}`}
                     <ChevronRight className="w-4 h-4" />
                   </>
@@ -384,7 +371,7 @@ export default function GetReportForm({
             </div>
 
             <p className="text-center text-xs pb-1" style={{ color: 'rgba(255,255,255,0.2)' }}>
-              Secured by Paddle · 256-bit encryption · Instant delivery
+              Order creation is handled internally. Payment instructions will be provided after checkout.
             </p>
           </form>
         </div>

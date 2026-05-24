@@ -47,7 +47,10 @@ export default function Header() {
                 {t('nav_home')}
                 <span className={activeLine}></span>
               </Link>
-
+              <Link href="/product" className={navLink}>
+                {t('nav_product')}
+                <span className={activeLine}></span>
+              </Link>
               <Link href="/pricing" className={navLink}>
                 {t('nav_pricing')}
                 <span className={activeLine}></span>
@@ -108,7 +111,7 @@ export default function Header() {
 
       {/* MOBILE MENU */}
       {isMobileMenuOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-[100] p-6"
           style={{ background: 'linear-gradient(135deg, #0a0f1e 0%, #0d1b2e 100%)' }}
         >
@@ -120,10 +123,10 @@ export default function Header() {
           </div>
 
           <div className="space-y-4 text-lg font-semibold">
-            <Link href="/" className="block text-white hover:text-[#f87171] transition">Home</Link>
-            <Link href="/pricing" className="block text-white hover:text-[#f87171] transition">Pricing</Link>
-            <Link href="/contact-us" className="block text-white hover:text-[#f87171] transition">Contact</Link>
-            <Link href="/about-us" className="block text-white hover:text-[#f87171] transition">About</Link>
+            <Link href="/" className="block text-white hover:text-[#f87171] transition" onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
+            <Link href="/pricing" className="block text-white hover:text-[#f87171] transition" onClick={() => setIsMobileMenuOpen(false)}>Pricing</Link>
+            <Link href="/contact-us" className="block text-white hover:text-[#f87171] transition" onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
+            <Link href="/about-us" className="block text-white hover:text-[#f87171] transition" onClick={() => setIsMobileMenuOpen(false)}>About</Link>
           </div>
         </div>
       )}
@@ -131,7 +134,7 @@ export default function Header() {
       {/* COUNTRY DROPDOWN */}
       {isCountryDropdownOpen && (
         <div className="fixed inset-0 z-[70]" style={{ background: 'rgba(0,0,0,0.4)' }}>
-          <div 
+          <div
             className="max-w-3xl mx-auto mt-10 p-6 rounded-2xl shadow-xl max-h-[80vh] flex flex-col"
             style={{ background: 'linear-gradient(135deg, #0a0f1e 0%, #0d1b2e 100%)' }}
           >
