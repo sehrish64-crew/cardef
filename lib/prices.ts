@@ -19,19 +19,19 @@ export const CURRENCY_SYMBOLS: Record<string, string> = {
 
 export const PRICING_MAP: Record<string, Record<PriceKey, number>> = {
   USD: {
-    basic: 19.99,
-    standard: 39.99,
-    premium: 59.99,
+    basic: 50,
+    standard: 70,
+    premium: 90,
   },
   EUR: {
-    basic: 17.99,
-    standard: 34.99,
-    premium: 52.99,
+    basic: 50,
+    standard: 70,
+    premium: 90,
   },
   GBP: {
-    basic: 15.99,
-    standard: 31.99,
-    premium: 48.99,
+    basic: 50,
+    standard: 70,
+    premium: 90,
   },
 }
 
