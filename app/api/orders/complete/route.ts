@@ -37,69 +37,38 @@ export async function POST(request: NextRequest) {
     // Update order in database
     await updateOrderPaymentStatus(numericOrderId, 'completed', paymentId)
 
-    // Send admin notification and customer confirmation
+    // Send a payment success email to admin and the customer
     try {
-      const notificationResp = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/send-email`, {
+      const paymentResp = await fetch(new URL('/api/send-email', request.url).toString(), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          type: 'order_notification',
+          type: 'payment_success',
           orderId: order.id,
           orderNumber: order.order_number,
+          transactionId: paymentId,
           customerEmail: order.customer_email,
-          vehicleType: order.vehicle_type,
-          identificationType: order.identification_type,
-          identificationValue: order.identification_value,
+          customerName: (order as any).customer_name || null,
+          vinNumber: (order as any).vin_number || (order as any).identification_value || null,
           packageType: order.package_type,
           amount: parseFloat(String(order.amount)),
           currency: order.currency,
-          paymentStatus: 'completed',
         }),
       })
 
       try {
-        const notifJson = await notificationResp.json()
-        if (!notificationResp.ok || notifJson?.success === false) {
-          console.error('Order completion notification failed:', notificationResp.status, notifJson)
+        const paymentJson = await paymentResp.json()
+        if (!paymentResp.ok || paymentJson?.success === false) {
+          console.error('Payment success email failed:', paymentResp.status, paymentJson)
         }
       } catch (e) {
-        const text = await notificationResp.text().catch(() => null)
-        console.error('Failed to parse send-email response for order_notification:', notificationResp.status, text)
-      }
-
-      const confirmationResp = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/send-email`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          type: 'order_confirmation',
-          orderId: order.id,
-          orderNumber: order.order_number,
-          customerEmail: order.customer_email,
-          vehicleType: order.vehicle_type,
-          identificationType: order.identification_type,
-          identificationValue: order.identification_value,
-          packageType: order.package_type,
-          amount: parseFloat(String(order.amount)),
-          currency: order.currency,
-          paymentStatus: 'completed',
-        }),
-      })
-
-      try {
-        const confJson = await confirmationResp.json()
-        if (!confirmationResp.ok || confJson?.success === false) {
-          console.error('Order completion confirmation email failed:', confirmationResp.status, confJson)
-        }
-      } catch (e) {
-        const text = await confirmationResp.text().catch(() => null)
-        console.error('Failed to parse send-email response for order_confirmation:', confirmationResp.status, text)
+        const text = await paymentResp.text().catch(() => null)
+        console.error('Failed to parse send-email response for payment_success:', paymentResp.status, text)
       }
     } catch (emailError) {
-      console.error('Failed to send email notifications:', emailError)
+      console.error('Failed to send payment success emails:', emailError)
     }
 
     return NextResponse.json({

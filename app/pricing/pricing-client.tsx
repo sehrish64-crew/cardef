@@ -237,43 +237,23 @@ export default function PricingClient() {
                   </div>
 
                   {/* Button */}
-                  {plan.checkoutUrl ? (
-                    <a
-                      href={plan.checkoutUrl}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      className={`w-full inline-flex py-2.5 sm:py-3 rounded-xl font-bold text-xs sm:text-sm tracking-wide items-center justify-center gap-2 transition-all duration-200`}
-                      style={{
-                        background: plan.popular
-                          ? 'linear-gradient(135deg, #2a5aaa, #1a3a6e)'
-                          : 'linear-gradient(135deg, #780000, #9b1111)',
-                        color: '#fff',
-                        boxShadow: plan.popular
-                          ? '0 8px 30px rgba(42,90,170,0.4)'
-                          : '0 8px 30px rgba(120,0,0,0.4)'
-                      }}
-                    >
-                      {plan.buttonText}
-                      <ChevronRight className="w-4 h-4" />
-                    </a>
-                  ) : (
-                    <button
-                      onClick={() => handleSelectPlan(plan.priceKey)}
-                      className={`w-full py-2.5 sm:py-3 rounded-xl font-bold text-xs sm:text-sm tracking-wide flex items-center justify-center gap-2 transition-all duration-200`}
-                      style={{
-                        background: plan.popular
-                          ? 'linear-gradient(135deg, #2a5aaa, #1a3a6e)'
-                          : 'linear-gradient(135deg, #780000, #9b1111)',
-                        color: '#fff',
-                        boxShadow: plan.popular
-                          ? '0 8px 30px rgba(42,90,170,0.4)'
-                          : '0 8px 30px rgba(120,0,0,0.4)'
-                      }}
-                    >
-                      {plan.buttonText}
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
-                  )}
+                  <button
+                    type="button"
+                    onClick={() => handleSelectPlan(plan.priceKey)}
+                    className={`w-full py-2.5 sm:py-3 rounded-xl font-bold text-xs sm:text-sm tracking-wide flex items-center justify-center gap-2 transition-all duration-200`}
+                    style={{
+                      background: plan.popular
+                        ? 'linear-gradient(135deg, #2a5aaa, #1a3a6e)'
+                        : 'linear-gradient(135deg, #780000, #9b1111)',
+                      color: '#fff',
+                      boxShadow: plan.popular
+                        ? '0 8px 30px rgba(42,90,170,0.4)'
+                        : '0 8px 30px rgba(120,0,0,0.4)'
+                    }}
+                  >
+                    {plan.buttonText}
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
 
                 </div>
               </div>

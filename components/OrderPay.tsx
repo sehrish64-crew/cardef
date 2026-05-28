@@ -35,7 +35,7 @@ export default function OrderPay({ order }: OrderPayProps) {
       <div className="mt-8 rounded-2xl bg-blue-50 p-5 text-slate-700">
         <p className="font-semibold text-slate-900">Payment integration is currently disabled</p>
         <p className="mt-2 text-sm leading-6">
-          We have removed the previous Paddle checkout flow. Your order has been created and will be processed manually.
+          We have removed the previous checkout flow. Your order has been created and will be processed manually.
           Please contact support for payment instructions or if you have any questions.
         </p>
         <p className="mt-4 text-sm text-slate-600">Support: <a href="mailto:info@carreaders.com" className="font-medium text-blue-600 underline">info@carreaders.com</a></p>

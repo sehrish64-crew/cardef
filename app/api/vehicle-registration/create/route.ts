@@ -116,6 +116,46 @@ export async function POST(req: NextRequest) {
 
     console.log(`Saved ${imageCount} images for registration ${registrationId}`)
 
+    try {
+      const sendEmailUrl = new URL(
+        '/api/send-email',
+        process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+      ).toString()
+
+      const emailResponse = await fetch(sendEmailUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type: 'vehicle_registration_both',
+          registrationId,
+          registrationNumber,
+          ownerName,
+          ownerEmail,
+          ownerPhone,
+          vehicleTitle,
+          vehicleYear,
+          vehicleMake,
+          vehicleModel,
+          vehicleType,
+          vin,
+          licensePlate,
+          description,
+          price: parseFloat(price),
+          currency,
+          paymentStatus: 'pending',
+        }),
+      })
+
+      const emailJson = await emailResponse.json().catch(() => null)
+      if (!emailResponse.ok || emailJson?.success === false) {
+        console.error('Vehicle registration email failed:', emailResponse.status, emailJson)
+      }
+    } catch (emailError) {
+      console.error('Failed to send vehicle registration email:', emailError)
+    }
+
     return NextResponse.json({
       success: true,
       registrationId,

@@ -89,13 +89,130 @@ function generatePaymentSuccessCustomerEmail(data: any): string {
   `;
 }
 
+function generateVehicleRegistrationNotificationEmail(data: any, lang = "en"): string {
+  const t = getTranslationsForLang(lang);
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL ||
+    process.env.BASE_URL ||
+    "http://localhost:3000";
+  const registrationLink = `${baseUrl}/admin/dashboard/vehicle-registrations/${data.registrationId}`;
+  return `<!DOCTYPE html><html><body>
+    <h1>${t["email_new_vehicle_registration"] || "New Vehicle Registration Submitted"}</h1>
+    <p><strong>${t["email_registration_number"] || "Registration Number"}:</strong> ${data.registrationNumber}</p>
+    <p><strong>${t["email_owner_name"] || "Owner"}:</strong> ${data.ownerName}</p>
+    <p><strong>${t["email_owner_email"] || "Email"}:</strong> ${data.ownerEmail}</p>
+    <p><strong>${t["email_phone"] || "Phone"}:</strong> ${data.ownerPhone}</p>
+    <p><strong>${t["email_vehicle"] || "Vehicle"}:</strong> ${data.vehicleTitle}</p>
+    <p><strong>${t["email_make"] || "Make"}:</strong> ${data.vehicleMake}</p>
+    <p><strong>${t["email_model"] || "Model"}:</strong> ${data.vehicleModel}</p>
+    <p><strong>${t["email_vehicle_type"] || "Type"}:</strong> ${data.vehicleType}</p>
+    <p><strong>${t["email_vin"] || "VIN"}:</strong> ${data.vin || "N/A"}</p>
+    <p><strong>${t["email_license_plate"] || "License Plate"}:</strong> ${data.licensePlate || "N/A"}</p>
+    <p><strong>${t["email_description"] || "Description"}:</strong></p>
+    <pre>${data.description || 'N/A'}</pre>
+    <p><strong>${t["email_price"] || "Price"}:</strong> ${data.currency} ${Number(data.price).toFixed(2)}</p>
+    <p><strong>${t["email_payment_status"] || "Payment status"}:</strong> ${data.paymentStatus || "pending"}</p>
+    <p><a href="${registrationLink}">${t["email_view_registration"] || "View registration in admin"}</a></p>
+    </body></html>`;
+}
+
+function generateVehicleRegistrationConfirmationEmail(data: any, lang = "en"): string {
+  const t = getTranslationsForLang(lang);
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL ||
+    process.env.BASE_URL ||
+    "http://localhost:3000";
+  const trackingLink = `${baseUrl}/register-vehicle/payment/${data.registrationId}`;
+  return `<!DOCTYPE html><html><body>
+    <h1>${t["email_registration_received"] || "We received your vehicle registration"}</h1>
+    <p>${t["email_thank_you"] || "Thank you for registering your vehicle with Carreaders."}</p>
+    <p><strong>${t["email_registration_number"] || "Registration Number"}:</strong> ${data.registrationNumber}</p>
+    <p><strong>${t["email_vehicle"] || "Vehicle"}:</strong> ${data.vehicleTitle} (${data.vehicleMake} ${data.vehicleModel})</p>
+    <p><strong>${t["email_amount"] || "Price"}:</strong> ${data.currency} ${Number(data.price).toFixed(2)}</p>
+    <p>${t["email_next_steps"] || "We will review your listing and contact you shortly. You may also continue payment or review details below."}</p>
+    <p><a href="${trackingLink}">${t["email_manage_registration"] || "Manage your registration"}</a></p>
+    </body></html>`;
+}
+
+async function sendEmailWithResend(
+  to: string,
+  subject: string,
+  htmlContent: string,
+  fromAddress: string,
+): Promise<{ success: boolean; message?: string }> {
+  const RESEND_API_KEY = process.env.RESEND_API_KEY;
+  if (!RESEND_API_KEY) {
+    return {
+      success: false,
+      message: "RESEND_API_KEY not configured.",
+    };
+  }
+
+  try {
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+      },
+      body: JSON.stringify({
+        from: fromAddress,
+        to: [to],
+        subject,
+        html: htmlContent,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => "Unknown Resend error");
+      console.error("Resend send failed:", errorText);
+      try {
+        await pool.execute(
+          "INSERT INTO email_failures (to_address, subject, body, error_message, created_at) VALUES (?, ?, ?, ?, NOW())",
+          [to, subject, htmlContent, errorText],
+        );
+      } catch (e) {
+        console.error("Failed to log Resend email failure to DB:", e);
+      }
+      return {
+        success: false,
+        message: `Resend failed: ${errorText}`,
+      };
+    }
+
+    try {
+      await pool.execute(
+        "INSERT INTO email_outbox (to_address, subject, body, provider, preview_url, status, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())",
+        [to, subject, htmlContent, "resend", null, "sent"],
+      );
+    } catch (e) {
+      console.error("Failed to persist sent email to outbox (Resend):", e);
+    }
+
+    return { success: true };
+  } catch (err: any) {
+    console.error("Resend send failed:", err);
+    try {
+      await pool.execute(
+        "INSERT INTO email_failures (to_address, subject, body, error_message, created_at) VALUES (?, ?, ?, ?, NOW())",
+        [to, subject, htmlContent, String(err.message || err)],
+      );
+    } catch (e) {
+      console.error("Failed to log Resend email failure to DB:", e);
+    }
+    return {
+      success: false,
+      message: err.message || "Unknown error sending email via Resend",
+    };
+  }
+}
+
 export async function sendEmail(
   to: string,
   subject: string,
   htmlContent: string,
 ): Promise<{ success: boolean; message?: string }> {
   try {
-    // Prefer SMTP (Nodemailer) if configured
     const SMTP_HOST = process.env.SMTP_HOST;
     const SMTP_PORT = process.env.SMTP_PORT
       ? Number(process.env.SMTP_PORT)
@@ -104,14 +221,14 @@ export async function sendEmail(
     const SMTP_PASS = process.env.SMTP_PASS;
     const SMTP_SECURE =
       (process.env.SMTP_SECURE || "false").toLowerCase() === "true";
+    const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
     const fromAddress =
       process.env.EMAIL_FROM ||
       (SMTP_USER ? SMTP_USER : "Vehicle Reports <no-reply@localhost>");
 
-    // DEBUG: Verify environment variables are loaded
     console.log(
-      `[SMTP DEBUG] Using User: ${SMTP_USER?.substring(0, 4)}... and Pass: ${SMTP_PASS?.substring(0, 4)}...`,
+      `[EMAIL DEBUG] SMTP_HOST=${SMTP_HOST ? 'configured' : 'missing'} SMTP_USER=${SMTP_USER ? 'configured' : 'missing'} RESEND_API_KEY=${RESEND_API_KEY ? 'configured' : 'missing'}`,
     );
 
     if (SMTP_HOST) {
@@ -120,11 +237,11 @@ export async function sendEmail(
         const nodemailer = (await import("nodemailer")) as any;
         const transportOptions: any = {
           host: SMTP_HOST,
-          port: 587,
-          secure: false, // Use STARTTLS
+          port: SMTP_PORT || 587,
+          secure: SMTP_SECURE,
           auth: { user: SMTP_USER, pass: SMTP_PASS },
           tls: {
-            rejectUnauthorized: false, // Bypass SSL issues during local dev
+            rejectUnauthorized: false,
           },
         };
 
@@ -141,7 +258,7 @@ export async function sendEmail(
           "Email sent via SMTP:",
           info && (info.messageId || info.response),
         );
-        // Persist in outbox
+
         try {
           await pool.execute(
             "INSERT INTO email_outbox (to_address, subject, body, provider, preview_url, status, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())",
@@ -150,10 +267,10 @@ export async function sendEmail(
         } catch (e) {
           console.error("Failed to persist sent email to outbox (SMTP):", e);
         }
+
         return { success: true };
       } catch (smtpErr: any) {
         console.error("SMTP send failed:", smtpErr);
-        // persist failure
         try {
           await pool.execute(
             "INSERT INTO email_failures (to_address, subject, body, error_message, created_at) VALUES (?, ?, ?, ?, NOW())",
@@ -162,7 +279,7 @@ export async function sendEmail(
         } catch (e) {
           console.error("Failed to log SMTP email failure to DB:", e);
         }
-        // Also record as failed in outbox for visibility
+
         try {
           await pool.execute(
             "INSERT INTO email_outbox (to_address, subject, body, provider, preview_url, status, error_message, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())",
@@ -179,14 +296,27 @@ export async function sendEmail(
         } catch (e) {
           console.error("Failed to persist failed email to outbox (SMTP):", e);
         }
-        // Fall back to Resend if available
+
+        if (RESEND_API_KEY) {
+          console.log("Attempting fallback via Resend API...");
+          return await sendEmailWithResend(to, subject, htmlContent, fromAddress);
+        }
+
+        return {
+          success: false,
+          message: "SMTP sending failed and no Resend API key is configured.",
+        };
       }
     }
 
-    // If we're here and no success has been returned, then it failed
+    if (RESEND_API_KEY) {
+      return await sendEmailWithResend(to, subject, htmlContent, fromAddress);
+    }
+
     return {
       success: false,
-      message: "SMTP sending failed and no other providers are configured.",
+      message:
+        "No email provider configured. Set SMTP_HOST/SMTP_USER/SMTP_PASS or RESEND_API_KEY.",
     };
   } catch (err: any) {
     console.error("Error sending email:", err);
@@ -249,6 +379,38 @@ export async function POST(request: NextRequest) {
         console.error("Error sending order_both emails:", err);
         return NextResponse.json(
           { success: false, message: "Failed to send order emails" },
+          { status: 500 },
+        );
+      }
+    }
+
+    if (data.type === "vehicle_registration_both") {
+      try {
+        const adminHtml = generateVehicleRegistrationNotificationEmail(data, lang);
+        const adminSubject =
+          getTranslationsForLang(lang)["email_new_registration_subject"] ||
+          `New Vehicle Registration: ${data.registrationNumber}`;
+        const customerHtml = generateVehicleRegistrationConfirmationEmail(data, lang);
+        const customerSubject =
+          getTranslationsForLang(lang)["email_registration_received_subject"] ||
+          `Registration Received - ${data.registrationNumber}`;
+
+        const adminRes = await sendEmail(ADMIN_EMAIL, adminSubject, adminHtml);
+        const customerRes = await sendEmail(
+          data.ownerEmail,
+          customerSubject,
+          customerHtml,
+        );
+
+        return NextResponse.json({
+          success: true,
+          admin: adminRes,
+          customer: customerRes,
+        });
+      } catch (err: any) {
+        console.error("Error sending vehicle_registration_both emails:", err);
+        return NextResponse.json(
+          { success: false, message: "Failed to send vehicle registration emails" },
           { status: 500 },
         );
       }

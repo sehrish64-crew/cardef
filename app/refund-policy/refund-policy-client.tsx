@@ -133,7 +133,7 @@ export default function RefundPolicyPageClient() {
 
             {/* <div className="mt-6 ml-4">
               <h3 className="text-xl font-semibold text-gray-900">Refund Window</h3>
-              <p className="mt-2">We offer a 14-day refund policy from the date of purchase in accordance with Paddle’s refund requirements.</p>
+              <p className="mt-2">We offer a 14-day refund policy from the date of purchase in accordance with our refund requirements.</p>
               <ul className="mt-2 space-y-2 list-disc list-inside">
                 <li>Refunds will be processed within 3-5 business days</li>
                 <li>The refund will be issued to the original payment method</li>

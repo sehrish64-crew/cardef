@@ -27,7 +27,7 @@ const packages = [
     id: 'standard',
     name: 'Standard',
     desc: 'Full history + accident records',
-    checkoutUrl: 'https://checkout.freemius.com/product/30562/plan/50188/',
+    checkoutUrl: 'https://checkout.freemius.com/product/30560/plan/50400/',
   },
   {
     id: 'premium',
@@ -109,10 +109,25 @@ export default function GetReportForm({
       const data = await res.json()
       if (!res.ok || !data.orderId) throw new Error(data.error || 'Order creation failed')
 
-      if (data.orderId) {
-        window.location.href = `/checkout/${data.orderId}`
+      // Find the checkout URL for the selected package
+      const selectedPackageData = packages.find(p => p.id === selectedPackage)
+      let checkoutUrl = selectedPackageData?.checkoutUrl
+
+      if (checkoutUrl) {
+        // In non-production/dev, force Freemius sandbox mode if URL is Freemius
+        try {
+          if (process.env.NODE_ENV !== 'production' && checkoutUrl.includes('checkout.freemius.com') && !/sandbox=true/.test(checkoutUrl)) {
+            checkoutUrl = checkoutUrl + (checkoutUrl.includes('?') ? '&' : '?') + 'sandbox=true'
+          }
+        } catch (e) {
+          // ignore
+        }
+
+        // Open the Freemius checkout link
+        window.location.href = checkoutUrl
       } else {
-        onClose()
+        // Fallback if no checkout URL found
+        window.location.href = `/checkout/${data.orderId}`
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create order. Please try again.')
@@ -343,20 +358,7 @@ export default function GetReportForm({
                 ))}
               </div>
 
-              {selectedPackage && packages.find((p) => p.id === selectedPackage)?.checkoutUrl && (
-                <div className="mt-3 text-center">
-                  <a
-                    href={packages.find((p) => p.id === selectedPackage)?.checkoutUrl}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-semibold transition-colors"
-                    style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', color: '#fff' }}
-                  >
-                    Open {packages.find((p) => p.id === selectedPackage)?.name} checkout link
-                    <ChevronRight className="w-4 h-4" />
-                  </a>
-                </div>
-              )}
+        
             </div>
 
             {/* Error */}
@@ -392,8 +394,8 @@ export default function GetReportForm({
                 ) : (
                   <>
                     <Shield className="w-4 h-4" />
-                    Submit Order
-                    {selectedPackage && ` — ${formatCurrency(getPrice(selectedPackage as any, selectedCountry.currency), selectedCountry.currency)}`}
+                    Continue To Payment
+                    {selectedPackage && ` ${formatCurrency(getPrice(selectedPackage as any, selectedCountry.currency), selectedCountry.currency)}`}
                     <ChevronRight className="w-4 h-4" />
                   </>
                 )}

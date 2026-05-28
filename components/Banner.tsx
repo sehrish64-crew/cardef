@@ -9,6 +9,7 @@ export default function Banner() {
   const [tab, setTab] = useState<'vin' | 'plate'>('vin')
   const [vin, setVin] = useState('')
   const [plate, setPlate] = useState('')
+  const [selectedPackage, setSelectedPackage] = useState<'basic' | 'standard' | 'premium' | ''>('')
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [isHydrated, setIsHydrated] = useState(false)
   const { t } = useTranslations()
@@ -324,6 +325,7 @@ export default function Banner() {
       <GetReportForm
         isOpen={isFormOpen}
         onClose={() => setIsFormOpen(false)}
+        preselectedPackage={selectedPackage || undefined}
         prefilledIdentType={tab}
         prefilledIdentValue={tab === 'vin' ? vin : plate}
       />

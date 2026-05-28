@@ -56,7 +56,3 @@ export function getPrice(packageKey: PriceKey, currency = 'USD') {
 export function getExternalPriceId(packageKey: PriceKey) {
   return undefined
 }
-
-export function getPaddlePriceId(packageKey: PriceKey) {
-  return undefined
-}

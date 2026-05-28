@@ -71,6 +71,37 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    try {
+      const sendEmailUrl = new URL('/api/send-email', request.url).toString()
+
+      const emailResponse = await fetch(sendEmailUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type: 'order_notification',
+          orderId: order.id,
+          orderNumber: order.order_number,
+          customerEmail: order.customer_email,
+          vehicleType: order.vehicle_type,
+          identificationType: order.identification_type,
+          identificationValue: order.identification_value,
+          packageType: order.package_type,
+          amount: parseFloat(String(order.amount)),
+          currency: order.currency,
+          paymentStatus: 'pending',
+        }),
+      })
+
+      const emailJson = await emailResponse.json().catch(() => null)
+      if (!emailResponse.ok || emailJson?.success === false) {
+        console.error('Order creation email failed:', emailResponse.status, emailJson)
+      }
+    } catch (emailError) {
+      console.error('Failed to send order creation notification email:', emailError)
+    }
+
     return NextResponse.json({
       success: true,
       orderId: order.id,
