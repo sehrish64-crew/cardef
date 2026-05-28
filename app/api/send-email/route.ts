@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/mysql";
 import { getTranslationsForLang } from "@/lib/translations";
+import { EmailTemplates } from "@/lib/email-templates";
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "carreaders@gmail.com";
 
