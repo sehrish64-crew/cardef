@@ -26,10 +26,9 @@ yarn-error.log*
 .env
 .env.*.local
 .env.local
-.env.local.example
 .env.development
-.env.production.example
 .env.production
+# .env.*.example files ARE tracked (safe templates)
 
 # vercel
 .vercel
