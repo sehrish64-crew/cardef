@@ -62,12 +62,12 @@ SMTP_HOST=smtp.gmail.com
 SMTP_PORT=465
 SMTP_SECURE=true
 SMTP_USER=info@vehicleinspectify.com
-SMTP_PASS=SehmanJatvoi321@
+SMTP_PASS=[REDACTED]
 EMAIL_FROM="Vehicle Reports <info@vehicleinspectify.com>"
 
 # API Keys
-RESEND_API_KEY=re_RVpNuQ2S_NuZrfm7nDDpR4fmp21pVYVPc
-AUTO_DEV_API_KEY=sk_ad_xVqOSaxxhix_2EKxUfQi4rtZ
+RESEND_API_KEY=[REDACTED]
+AUTO_DEV_API_KEY=[REDACTED]
 
 # Site Configuration
 NEXT_PUBLIC_BASE_URL=https://yourdomain.com
