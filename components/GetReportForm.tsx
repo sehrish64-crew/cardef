@@ -17,9 +17,24 @@ interface GetReportFormProps {
 
 const vehicleTypes = ['Car', 'Motorcycle', 'Truck', 'Boat', 'ATV', 'Campervan']
 const packages = [
-  { id: 'basic', name: 'Basic', desc: 'Core vehicle specs & title check' },
-  { id: 'standard', name: 'Standard', desc: 'Full history + accident records' },
-  { id: 'premium', name: 'Premium', desc: 'Everything + market value & theft' },
+  {
+    id: 'basic',
+    name: 'Basic',
+    desc: 'Core vehicle specs & title check',
+    checkoutUrl: 'https://checkout.freemius.com/product/30450/plan/50029/',
+  },
+  {
+    id: 'standard',
+    name: 'Standard',
+    desc: 'Full history + accident records',
+    checkoutUrl: 'https://checkout.freemius.com/product/30562/plan/50188/',
+  },
+  {
+    id: 'premium',
+    name: 'Premium',
+    desc: 'Everything + market value & theft',
+    checkoutUrl: 'https://checkout.freemius.com/product/30563/plan/50189/',
+  },
 ]
 
 export default function GetReportForm({
@@ -327,6 +342,21 @@ export default function GetReportForm({
                   </button>
                 ))}
               </div>
+
+              {selectedPackage && packages.find((p) => p.id === selectedPackage)?.checkoutUrl && (
+                <div className="mt-3 text-center">
+                  <a
+                    href={packages.find((p) => p.id === selectedPackage)?.checkoutUrl}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-semibold transition-colors"
+                    style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)', color: '#fff' }}
+                  >
+                    Open {packages.find((p) => p.id === selectedPackage)?.name} checkout link
+                    <ChevronRight className="w-4 h-4" />
+                  </a>
+                </div>
+              )}
             </div>
 
             {/* Error */}

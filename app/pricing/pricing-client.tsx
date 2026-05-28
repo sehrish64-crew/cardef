@@ -20,6 +20,7 @@ const basePricingPlans = [
     priceKey: 'basic' as const,
     icon: Zap,
     popular: true,
+    checkoutUrl: 'https://checkout.freemius.com/product/30450/plan/50029/',
     features: [
       'Accident Records',
       'Theft Records',
@@ -27,7 +28,7 @@ const basePricingPlans = [
       'Open Recalls',
       'Lease Records',
     ],
-    buttonText: 'Select Plan',
+    buttonText: 'Buy Basic',
   },
   {
     name: 'Standard',
@@ -35,6 +36,7 @@ const basePricingPlans = [
     priceKey: 'standard' as const,
     icon: Sparkles,
     popular: false,
+    checkoutUrl: 'https://checkout.freemius.com/product/30562/plan/50188/',
     features: [
       'Accident Records',
       'Theft Records',
@@ -44,7 +46,7 @@ const basePricingPlans = [
       'Loan Details',
       'Market Value',
     ],
-    buttonText: 'Select Plan',
+    buttonText: 'Buy Standard',
   },
   {
     name: 'Premium',
@@ -52,6 +54,7 @@ const basePricingPlans = [
     priceKey: 'premium' as const,
     icon: Crown,
     popular: false,
+    checkoutUrl: 'https://checkout.freemius.com/product/30563/plan/50189/',
     features: [
       'All Premium Features',
       'Accident Records',
@@ -63,7 +66,7 @@ const basePricingPlans = [
       'Market Value',
       'Specifications',
     ],
-    buttonText: 'Select Plan',
+    buttonText: 'Buy Premium',
   },
 ]
 
@@ -234,22 +237,43 @@ export default function PricingClient() {
                   </div>
 
                   {/* Button */}
-                  <button
-                    onClick={() => handleSelectPlan(plan.priceKey)}
-                    className={`w-full py-2.5 sm:py-3 rounded-xl font-bold text-xs sm:text-sm tracking-wide flex items-center justify-center gap-2 transition-all duration-200`}
-                    style={{
-                      background: plan.popular
-                        ? 'linear-gradient(135deg, #2a5aaa, #1a3a6e)'
-                        : 'linear-gradient(135deg, #780000, #9b1111)',
-                      color: '#fff',
-                      boxShadow: plan.popular
-                        ? '0 8px 30px rgba(42,90,170,0.4)'
-                        : '0 8px 30px rgba(120,0,0,0.4)'
-                    }}
-                  >
-                    {plan.buttonText}
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
+                  {plan.checkoutUrl ? (
+                    <a
+                      href={plan.checkoutUrl}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className={`w-full inline-flex py-2.5 sm:py-3 rounded-xl font-bold text-xs sm:text-sm tracking-wide items-center justify-center gap-2 transition-all duration-200`}
+                      style={{
+                        background: plan.popular
+                          ? 'linear-gradient(135deg, #2a5aaa, #1a3a6e)'
+                          : 'linear-gradient(135deg, #780000, #9b1111)',
+                        color: '#fff',
+                        boxShadow: plan.popular
+                          ? '0 8px 30px rgba(42,90,170,0.4)'
+                          : '0 8px 30px rgba(120,0,0,0.4)'
+                      }}
+                    >
+                      {plan.buttonText}
+                      <ChevronRight className="w-4 h-4" />
+                    </a>
+                  ) : (
+                    <button
+                      onClick={() => handleSelectPlan(plan.priceKey)}
+                      className={`w-full py-2.5 sm:py-3 rounded-xl font-bold text-xs sm:text-sm tracking-wide flex items-center justify-center gap-2 transition-all duration-200`}
+                      style={{
+                        background: plan.popular
+                          ? 'linear-gradient(135deg, #2a5aaa, #1a3a6e)'
+                          : 'linear-gradient(135deg, #780000, #9b1111)',
+                        color: '#fff',
+                        boxShadow: plan.popular
+                          ? '0 8px 30px rgba(42,90,170,0.4)'
+                          : '0 8px 30px rgba(120,0,0,0.4)'
+                      }}
+                    >
+                      {plan.buttonText}
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  )}
 
                 </div>
               </div>
