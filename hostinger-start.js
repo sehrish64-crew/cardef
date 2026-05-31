@@ -9,13 +9,22 @@ const { spawn } = require('child_process');
 const path = require('path');
 
 // Load environment variables from a .env file if present in common locations.
-// This allows the app to pick up .env placed outside public_html (for security).
+// This allows the app to pick up config from .env, .env.local, .env.production, or .env.production.local.
 try {
   const dotenv = require('dotenv')
   const tryPaths = [
     path.join(__dirname, '.env'),
+    path.join(__dirname, '.env.local'),
+    path.join(__dirname, '.env.production'),
+    path.join(__dirname, '.env.production.local'),
     path.join(__dirname, '..', '.env'),
+    path.join(__dirname, '..', '.env.local'),
+    path.join(__dirname, '..', '.env.production'),
+    path.join(__dirname, '..', '.env.production.local'),
     path.join(__dirname, '..', '..', '.env'),
+    path.join(__dirname, '..', '..', '.env.local'),
+    path.join(__dirname, '..', '..', '.env.production'),
+    path.join(__dirname, '..', '..', '.env.production.local'),
   ]
 
   let loaded = false
@@ -23,7 +32,7 @@ try {
     try {
       const res = dotenv.config({ path: p })
       if (res.parsed) {
-        console.log(`Loaded .env from ${p}`)
+        console.log(`Loaded environment variables from ${p}`)
         loaded = true
         break
       }
@@ -32,7 +41,7 @@ try {
     }
   }
   if (!loaded) {
-    if (process.env.NODE_ENV !== 'production') console.log('No .env file loaded from common locations')
+    if (process.env.NODE_ENV !== 'production') console.log('No environment file loaded from common locations')
   }
 } catch (e) {
   // dotenv not available — environment variables must be provided by the host
