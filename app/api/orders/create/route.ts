@@ -3,7 +3,36 @@ import { insertOrder } from '@/lib/database'
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
+    const bodyText = await request.text()
+    if (!bodyText) {
+      console.error('❌ Empty request body received')
+      return NextResponse.json(
+        { error: 'Request body is required and must be valid JSON' },
+        { status: 400 }
+      )
+    }
+
+    let body: any
+    try {
+      body = JSON.parse(bodyText)
+    } catch (parseError) {
+      console.error('❌ Invalid JSON body:', parseError)
+      return NextResponse.json(
+        { error: 'Request body must be valid JSON' },
+        { status: 400 }
+      )
+    }
+
+    const clientIp =
+      request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown'
+    const userAgent = request.headers.get('user-agent') || 'unknown'
+    const referer = request.headers.get('referer') || request.headers.get('referrer') || 'unknown'
+
+    console.log('➡️ Incoming /api/orders/create request URL:', request.url)
+    console.log('➡️ Client IP:', clientIp)
+    console.log('➡️ User-Agent:', userAgent)
+    console.log('➡️ Referer:', referer)
+    console.log('➡️ Full request body:', JSON.stringify(body))
     const {
       customer_email,
       vehicle_type,

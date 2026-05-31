@@ -106,6 +106,7 @@ export default function GetReportForm({
         paymentProvider: null,
       }
 
+      console.log('[ORDER CREATE] Sending payload', requestBody)
       const res = await fetch('/api/orders/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -114,6 +115,8 @@ export default function GetReportForm({
       // Safely parse JSON and guard against HTML error pages
       let data = null
       const resText = await res.text()
+      console.log('[ORDER CREATE] Response status', res.status, res.statusText)
+      console.log('[ORDER CREATE] Response text', resText)
       try {
         const ct = res.headers.get('content-type') || ''
         if (ct.includes('application/json')) {
@@ -140,9 +143,11 @@ export default function GetReportForm({
           // ignore
         }
 
+        console.log('[ORDER CREATE] Redirecting to checkout URL', checkoutUrl)
         // Open the Freemius checkout link
         window.location.href = checkoutUrl
       } else {
+        console.log('[ORDER CREATE] No checkout URL found, falling back to internal checkout page')
         // Fallback if no checkout URL found
         window.location.href = `/checkout/${data.orderId}`
       }

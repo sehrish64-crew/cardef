@@ -10,6 +10,16 @@ import { EmailTemplates } from '@/lib/email-templates-professional';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    const clientIp =
+      request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown'
+    const userAgent = request.headers.get('user-agent') || 'unknown'
+    const referer = request.headers.get('referer') || request.headers.get('referrer') || 'unknown'
+
+    console.log('➡️ Incoming /api/forms/submit request URL:', request.url)
+    console.log('➡️ Client IP:', clientIp)
+    console.log('➡️ User-Agent:', userAgent)
+    console.log('➡️ Referer:', referer)
+    console.log('➡️ Full request body:', JSON.stringify(body))
     const {
       name,
       email,

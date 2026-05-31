@@ -141,6 +141,7 @@ export default function GetReportForm({
                 paymentProvider: null,
             }
 
+            console.log('[ORDER CREATE] Sending payload', requestBody)
             const orderRes = await fetch('/api/orders/create', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -150,6 +151,8 @@ export default function GetReportForm({
             // Safely parse JSON; if server returns HTML (e.g., error page), capture body for debug
             let orderData = null
             const orderText = await orderRes.text()
+            console.log('[ORDER CREATE] Response status', orderRes.status, orderRes.statusText)
+            console.log('[ORDER CREATE] Response text', orderText)
             try {
                 const ct = orderRes.headers.get('content-type') || ''
                 if (ct.includes('application/json')) {
