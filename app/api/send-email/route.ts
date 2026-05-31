@@ -3,7 +3,17 @@ import pool from "@/lib/mysql";
 import { getTranslationsForLang } from "@/lib/translations";
 import { EmailTemplates } from "@/lib/email-templates";
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "carreaders@gmail.com";
+const ADMIN_EMAIL =
+  process.env.ADMIN_EMAIL ||
+  process.env.EMAIL_FROM ||
+  process.env.SMTP_USER ||
+  "admin@example.com";
+
+if (!process.env.ADMIN_EMAIL) {
+  console.warn(
+    "[EMAIL CONFIG WARNING] ADMIN_EMAIL is not set. Falling back to: " + ADMIN_EMAIL,
+  );
+}
 
 function generateOrderNotificationEmail(data: any, lang = "en"): string {
   const t = getTranslationsForLang(lang);
@@ -12,14 +22,25 @@ function generateOrderNotificationEmail(data: any, lang = "en"): string {
     process.env.BASE_URL ||
     "http://localhost:3000";
   const orderLink = `${baseUrl}/admin/dashboard/orders/${data.orderId}`;
+  const identLabel =
+    data.identification_type === "plate" ? "Plate Number" : "VIN";
+  const identValue = data.identification_value || data.vin_number || "N/A";
+
   return `<!DOCTYPE html><html><body>
     <h1>${t["email_new_order"] || "New Order Received"}</h1>
+    <p>A new report request has been submitted via the Get Report form. Details are below:</p>
     <p><strong>${t["email_order_number"] || "Order Number"}:</strong> ${data.orderNumber}</p>
-    <p><strong>${t["email_customer"] || "Customer"}:</strong> ${data.customerEmail}</p>
-    <p><strong>${t["email_package"] || "Package"}:</strong> ${data.packageType}</p>
-    <p><strong>${t["email_amount"] || "Amount"}:</strong> ${data.currency} ${Number(data.amount).toFixed(2)}</p>
+    <p><strong>${t["email_customer"] || "Customer Email"}:</strong> ${data.customerEmail}</p>
+    <p><strong>Vehicle Type:</strong> ${data.vehicleType || "N/A"}</p>
+    <p><strong>${identLabel}:</strong> ${identValue}</p>
+    <p><strong>Package:</strong> ${data.packageType}</p>
+    <p><strong>Country:</strong> ${data.countryCode || "N/A"}</p>
+    <p><strong>Amount:</strong> ${data.currency || "USD"} ${Number(data.amount).toFixed(2)}</p>
     <p><strong>${t["email_payment_status"] || "Payment status"}:</strong> ${data.paymentStatus || "pending"}</p>
     <p><a href="${orderLink}">View order in admin</a></p>
+    <hr />
+    <h2>Submitted Form Data</h2>
+    <pre style="white-space: pre-wrap; word-break: break-word; background: #f7f7f7; padding: 12px; border-radius: 8px;">${JSON.stringify(data, null, 2)}</pre>
     </body></html>`;
 }
 
@@ -30,11 +51,17 @@ function generateOrderConfirmationEmail(data: any, lang = "en"): string {
     process.env.BASE_URL ||
     "http://localhost:3000";
   const checkoutLink = `${baseUrl}/checkout/${data.orderId}`;
+  const identLabel =
+    data.identification_type === "plate" ? "Plate Number" : "VIN";
+  const identValue = data.identification_value || data.vin_number || "N/A";
+
   return `<!DOCTYPE html><html><body>
     <h1>${t["email_order_confirmed"] || "Order Confirmed"}</h1>
     <p><strong>${t["email_order_number"] || "Order Number"}:</strong> ${data.orderNumber}</p>
+    <p><strong>Vehicle Type:</strong> ${data.vehicleType || "N/A"}</p>
+    <p><strong>${identLabel}:</strong> ${identValue}</p>
     <p><strong>${t["email_product"] || "Product"}:</strong> ${data.packageType} ${t["email_report"] || "Report"}</p>
-    <p><strong>${t["email_amount_paid"] || "Amount Paid"}:</strong> ${data.currency} ${Number(data.amount).toFixed(2)}</p>
+    <p><strong>${t["email_amount_paid"] || "Amount Paid"}:</strong> ${data.currency || "USD"} ${Number(data.amount).toFixed(2)}</p>
     <p>${t["email_thanks"] || "Thank you for your purchase! You can view your order or continue to checkout below."}</p>
     <p><a href="${checkoutLink}">${t["email_view_order"] || "View order / Continue to checkout"}</a></p>
     </body></html>`;
@@ -340,7 +367,9 @@ export async function POST(request: NextRequest) {
         getTranslationsForLang(lang)["email_new_order_subject"] ||
         `New Order: ${data.orderNumber}`;
       const result = await sendEmail(ADMIN_EMAIL, subject, html);
-      return NextResponse.json(result);
+      return result.success
+        ? NextResponse.json(result)
+        : NextResponse.json(result, { status: 500 });
     }
 
     if (data.type === "order_confirmation") {
@@ -349,7 +378,9 @@ export async function POST(request: NextRequest) {
         getTranslationsForLang(lang)["email_order_confirmed_subject"] ||
         `Order Confirmation - ${data.orderNumber}`;
       const result = await sendEmail(data.customerEmail, subject, html);
-      return NextResponse.json(result);
+      return result.success
+        ? NextResponse.json(result)
+        : NextResponse.json(result, { status: 500 });
     }
 
     // Convenience: send both admin notification and customer confirmation in a single request
@@ -370,6 +401,18 @@ export async function POST(request: NextRequest) {
           customerSubject,
           customerHtml,
         );
+
+        if (!adminRes.success || !customerRes.success) {
+          return NextResponse.json(
+            {
+              success: false,
+              message: 'One or more order emails failed to send.',
+              admin: adminRes,
+              customer: customerRes,
+            },
+            { status: 500 },
+          );
+        }
 
         return NextResponse.json({
           success: true,
@@ -403,6 +446,18 @@ export async function POST(request: NextRequest) {
           customerHtml,
         );
 
+        if (!adminRes.success || !customerRes.success) {
+          return NextResponse.json(
+            {
+              success: false,
+              message: 'One or more vehicle registration emails failed to send.',
+              admin: adminRes,
+              customer: customerRes,
+            },
+            { status: 500 },
+          );
+        }
+
         return NextResponse.json({
           success: true,
           admin: adminRes,
@@ -423,7 +478,9 @@ export async function POST(request: NextRequest) {
         getTranslationsForLang(lang)["email_contact_subject"] ||
         `Contact Form: ${data.subject}`;
       const result = await sendEmail(ADMIN_EMAIL, subject, html);
-      return NextResponse.json(result);
+      return result.success
+        ? NextResponse.json(result)
+        : NextResponse.json(result, { status: 500 });
     }
 
     if (data.type === "review_notification") {
@@ -432,7 +489,9 @@ export async function POST(request: NextRequest) {
         getTranslationsForLang(lang)["email_review_subject"] ||
         `New Review from ${data.name}`;
       const result = await sendEmail(ADMIN_EMAIL, subject, html);
-      return NextResponse.json(result);
+      return result.success
+        ? NextResponse.json(result)
+        : NextResponse.json(result, { status: 500 });
     }
 
     if (data.type === "payment_success") {
@@ -448,6 +507,18 @@ export async function POST(request: NextRequest) {
           customerSubject,
           customerHtml,
         );
+
+        if (!adminRes.success || !customerRes.success) {
+          return NextResponse.json(
+            {
+              success: false,
+              message: 'One or more payment success emails failed to send.',
+              admin: adminRes,
+              customer: customerRes,
+            },
+            { status: 500 },
+          );
+        }
 
         return NextResponse.json({
           success: true,

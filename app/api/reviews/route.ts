@@ -67,15 +67,12 @@ export async function POST(request: Request) {
 
     // Notify admin about new review (non-blocking)
     try {
-      // In development, use localhost; in production, use the configured base URL
-      const baseUrl = process.env.NODE_ENV === 'development' 
-        ? 'http://localhost:3000'
-        : (process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000');
-      console.log('📧 Sending review notification email using baseUrl:', baseUrl);
+      const sendEmailUrl = new URL('/api/send-email', request.url).toString();
+      console.log('📧 Sending review notification email using sendEmailUrl:', sendEmailUrl);
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
       
-      const resp = await fetch(`${baseUrl}/api/send-email`, {
+      const resp = await fetch(sendEmailUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -96,15 +93,21 @@ export async function POST(request: Request) {
         const json = await resp.json()
         if (!resp.ok || json?.success === false) {
           console.error('⚠️ Review notification email failed:', resp.status, json)
+          throw new Error(json?.message || json?.error || 'Failed to send review notification email')
         } else {
           console.log('✅ Review notification email sent successfully')
         }
       } catch (e) {
         const text = await resp.text().catch(() => null)
         console.error('⚠️ Failed to parse send-email response:', resp.status, text)
+        throw e
       }
     } catch (err) {
       console.error('⚠️ Failed to send review notification (non-blocking):', err)
+      return NextResponse.json(
+        { error: 'Review created, but notification email failed to send.', details: String(err) },
+        { status: 500 }
+      )
     }
 
     return NextResponse.json(review, { status: 201 });

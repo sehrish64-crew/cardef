@@ -117,10 +117,7 @@ export async function POST(req: NextRequest) {
     console.log(`Saved ${imageCount} images for registration ${registrationId}`)
 
     try {
-      const sendEmailUrl = new URL(
-        '/api/send-email',
-        process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-      ).toString()
+      const sendEmailUrl = new URL('/api/send-email', req.url).toString()
 
       const emailResponse = await fetch(sendEmailUrl, {
         method: 'POST',

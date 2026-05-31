@@ -38,20 +38,24 @@ export async function POST(req: NextRequest) {
 
     const registration = (registrations as any[])[0]
 
+    const sendEmailUrl = new URL('/api/send-email', req.url).toString();
+
     // Send confirmation email to owner
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/email/send`, {
+      await fetch(sendEmailUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          to: registration.owner_email,
-          subject: 'Vehicle Registration Payment Received',
-          template: 'vehicle_registration_payment_received',
-          data: {
-            ownerName: registration.owner_name,
-            vehicleTitle: registration.vehicle_title,
-            registrationNumber: registration.registration_number,
-          },
+          type: 'payment_success',
+          orderId: registrationId,
+          orderNumber: registration.registration_number,
+          transactionId: paymentId,
+          customerEmail: registration.owner_email,
+          customerName: registration.owner_name,
+          vinNumber: registration.vehicle_title,
+          packageType: 'Vehicle Registration',
+          amount: 0,
+          currency: registration.currency || 'USD',
         }),
       })
     } catch (err) {

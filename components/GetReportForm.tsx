@@ -72,12 +72,17 @@ export default function GetReportForm({
       setSelectedCountryCode(selectedCountry.code)
   }, [selectedCountry])
 
+  const normalizeEmail = (email: string) => email.trim().toLowerCase()
+
   const validateForm = () => {
     setError('')
+    const sanitizedEmail = normalizeEmail(customerEmail)
+
     if (!vehicleType) return setError('Select vehicle type'), false
     if (vehicleIdType === 'vin' && !vinNumber) return setError('Enter VIN'), false
     if (vehicleIdType === 'plate' && !plateNumber) return setError('Enter plate number'), false
-    if (!customerEmail) return setError('Enter email'), false
+    if (!sanitizedEmail) return setError('Enter email'), false
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(sanitizedEmail)) return setError('Enter a valid email address'), false
     if (!selectedPackage) return setError('Select a package'), false
     return true
   }
@@ -89,7 +94,7 @@ export default function GetReportForm({
 
     try {
       const requestBody = {
-        customer_email: customerEmail,
+        customer_email: normalizeEmail(customerEmail),
         vehicle_type: vehicleType,
         vin_number: vehicleIdType === 'vin' ? vinNumber : null,
         identification_type: vehicleIdType,
@@ -106,8 +111,20 @@ export default function GetReportForm({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody),
       })
-      const data = await res.json()
-      if (!res.ok || !data.orderId) throw new Error(data.error || 'Order creation failed')
+      // Safely parse JSON and guard against HTML error pages
+      let data = null
+      const resText = await res.text()
+      try {
+        const ct = res.headers.get('content-type') || ''
+        if (ct.includes('application/json')) {
+          data = JSON.parse(resText)
+        } else {
+          console.error('Expected JSON from /api/orders/create but got:', ct, resText.slice(0,1000))
+        }
+      } catch (err) {
+        console.error('Failed to parse JSON from /api/orders/create:', err, resText.slice(0,1000))
+      }
+      if (!res.ok || !data?.orderId) throw new Error((data && data.error) ? data.error : `Order creation failed: ${resText.slice(0,200)}`)
 
       // Find the checkout URL for the selected package
       const selectedPackageData = packages.find(p => p.id === selectedPackage)
@@ -316,7 +333,10 @@ export default function GetReportForm({
                   type="email"
                   value={customerEmail}
                   onChange={(e) => setCustomerEmail(e.target.value)}
+                  onBlur={() => setCustomerEmail(normalizeEmail(customerEmail))}
                   placeholder="your.email@example.com"
+                  autoComplete="email"
+                  pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
                   required
                   className="w-full h-12 pl-10 pr-4 rounded-xl text-sm text-white placeholder:text-white/20 outline-none border transition-all"
                   style={{ background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.09)' }}

@@ -157,7 +157,7 @@ export const EmailTemplates = {
         ${formatFieldRow('Customer', data.customerName || data.customerEmail, true)}
         ${formatFieldRow('Email', data.customerEmail)}
         ${formatFieldRow('Package', data.packageType, true)}
-        ${formatFieldRow('Amount', \`\${currency} \${Number(data.amount).toFixed(2)}\`, true)}
+        ${formatFieldRow('Amount', `${currency} ${Number(data.amount).toFixed(2)}`, true)}
         ${formatFieldRow('Payment Status', data.paymentStatus || 'pending')}
         ${data.vinNumber ? formatFieldRow('VIN', data.vinNumber) : ''}
       </table>
@@ -198,7 +198,7 @@ export const EmailTemplates = {
         <table style="width: 100%; border-collapse: collapse;">
           ${formatFieldRow('Order Number', data.orderNumber, true)}
           ${formatFieldRow('Package', data.packageType, true)}
-          ${formatFieldRow('Amount', \`\${currency} \${Number(data.amount).toFixed(2)}\`, true)}
+          ${formatFieldRow('Amount', `${currency} ${Number(data.amount).toFixed(2)}`, true)}
         </table>
       </div>
       
@@ -252,15 +252,15 @@ export const EmailTemplates = {
         ${formatFieldRow('Model', data.vehicleModel || 'N/A')}
         ${data.vin ? formatFieldRow('VIN', data.vin) : ''}
         ${data.licensePlate ? formatFieldRow('License Plate', data.licensePlate) : ''}
-        ${data.price ? formatFieldRow('Asking Price', \`\${currency} \${Number(data.price).toFixed(2)}\`) : ''}
+        ${data.price ? formatFieldRow('Asking Price', `${currency} ${Number(data.price).toFixed(2)}`) : ''}
       </table>
       
-      ${data.description ? \`
+      ${data.description ? `
         <div style="background: white; padding: 15px; border-radius: 6px; margin: 20px 0; border-left: 4px solid #3b82f6;">
           <p style="margin-top: 0; font-weight: bold; color: #1e40af;">Description:</p>
-          <p style="white-space: pre-wrap; word-wrap: break-word; background: #f9fafb; padding: 10px; border-radius: 4px; color: #555;">\${data.description}</p>
+          <p style="white-space: pre-wrap; word-wrap: break-word; background: #f9fafb; padding: 10px; border-radius: 4px; color: #555;">${data.description}</p>
         </div>
-      \` : ''}
+      ` : ''}
       
       <div style="text-align: center; margin: 30px 0;">
         <a href="${regLink}" style="display: inline-block; background: #3b82f6; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: 600; transition: background 0.2s;">
@@ -294,7 +294,7 @@ export const EmailTemplates = {
         ${formatFieldRow('Customer', data.customerName || data.customerEmail, true)}
         ${formatFieldRow('Email', data.customerEmail)}
         ${formatFieldRow('Package', data.packageType, true)}
-        ${formatFieldRow('Amount', \`\${currency} \${Number(data.amount).toFixed(2)}\`, true)}
+        ${formatFieldRow('Amount', `${currency} ${Number(data.amount).toFixed(2)}`, true)}
         ${data.vinNumber ? formatFieldRow('VIN', data.vinNumber) : ''}
       </table>
       

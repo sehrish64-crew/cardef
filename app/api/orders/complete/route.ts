@@ -39,33 +39,38 @@ export async function POST(request: NextRequest) {
 
     // Send a payment success email to admin and the customer
     try {
-      const paymentResp = await fetch(new URL('/api/send-email', request.url).toString(), {
+      const customerName = (order as any).customer_name || order.customer_email.split('@')[0];
+      const vehicleInfo = order.vin_number || order.identification_value || '';
+      const paymentResp = await fetch(new URL('/api/payments/notification', request.url).toString(), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          type: 'payment_success',
-          orderId: order.id,
           orderNumber: order.order_number,
-          transactionId: paymentId,
+          customerName,
           customerEmail: order.customer_email,
-          customerName: (order as any).customer_name || null,
-          vinNumber: (order as any).vin_number || (order as any).identification_value || null,
-          packageType: order.package_type,
           amount: parseFloat(String(order.amount)),
           currency: order.currency,
+          packageType: order.package_type,
+          transactionId: paymentId,
+          paymentMethod: order.payment_provider || undefined,
+          vehicleInfo,
+          dashboardUrl: process.env.NEXT_PUBLIC_BASE_URL
+            ? `${process.env.NEXT_PUBLIC_BASE_URL}/admin/dashboard/orders/${order.order_number}`
+            : undefined,
+          supportEmail: process.env.ADMIN_EMAIL || process.env.EMAIL_FROM || undefined,
         }),
       })
 
       try {
         const paymentJson = await paymentResp.json()
         if (!paymentResp.ok || paymentJson?.success === false) {
-          console.error('Payment success email failed:', paymentResp.status, paymentJson)
+          console.error('Payment notification email failed:', paymentResp.status, paymentJson)
         }
       } catch (e) {
         const text = await paymentResp.text().catch(() => null)
-        console.error('Failed to parse send-email response for payment_success:', paymentResp.status, text)
+        console.error('Failed to parse payment notification response:', paymentResp.status, text)
       }
     } catch (emailError) {
       console.error('Failed to send payment success emails:', emailError)
