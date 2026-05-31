@@ -143,12 +143,17 @@ export default function GetReportForm({
           // ignore
         }
 
+        if (process.env.NODE_ENV === 'production' && checkoutUrl.includes('checkout.freemius.com')) {
+          console.warn('[ORDER CREATE] Production redirect to Freemius disabled due to known checkout issues; using internal checkout page instead')
+          checkoutUrl = undefined
+        }
+      }
+
+      if (checkoutUrl) {
         console.log('[ORDER CREATE] Redirecting to checkout URL', checkoutUrl)
-        // Open the Freemius checkout link
         window.location.href = checkoutUrl
       } else {
-        console.log('[ORDER CREATE] No checkout URL found, falling back to internal checkout page')
-        // Fallback if no checkout URL found
+        console.log('[ORDER CREATE] Redirecting to internal checkout page', `/checkout/${data.orderId}`)
         window.location.href = `/checkout/${data.orderId}`
       }
     } catch (err) {

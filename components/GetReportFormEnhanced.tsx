@@ -218,6 +218,13 @@ export default function GetReportForm({
                     // ignore
                 }
 
+                if (process.env.NODE_ENV === 'production' && checkoutUrl.includes('checkout.freemius.com')) {
+                    console.warn('[ORDER CREATE] Production redirect to Freemius disabled due to known checkout issues; using internal checkout page instead')
+                    checkoutUrl = undefined
+                }
+            }
+
+            if (checkoutUrl) {
                 updateProcessingStep(2, 'complete', 'Ready to redirect to payment')
 
                 // Delay redirect slightly to show completion state
@@ -226,7 +233,12 @@ export default function GetReportForm({
                 // Redirect to payment
                 window.location.href = checkoutUrl
             } else {
-                throw new Error('No payment method available')
+                updateProcessingStep(2, 'complete', 'Ready to show internal checkout page')
+
+                // Delay redirect slightly to show completion state
+                await new Promise((resolve) => setTimeout(resolve, 1000))
+
+                window.location.href = `/checkout/${orderData.orderId}`
             }
         } catch (err) {
             const errorMsg = err instanceof Error ? err.message : 'An unexpected error occurred'
