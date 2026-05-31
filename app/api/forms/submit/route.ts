@@ -9,7 +9,10 @@ import { EmailTemplates } from '@/lib/email-templates-professional';
 
 async function forwardToGetform(data: { name: string; email: string; subject?: string; message: string; formType: string; }) {
   const getformEndpoint = process.env.GETFORM_ENDPOINT?.trim();
-  if (!getformEndpoint) return null;
+  if (!getformEndpoint) {
+    console.warn('[FORM SUBMISSION] GETFORM_ENDPOINT is not configured; skipping Getform forwarding.');
+    return null;
+  }
 
   try {
     const formPayload = new URLSearchParams();
