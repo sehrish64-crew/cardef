@@ -7,41 +7,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { sendEmail, validateEmail, sanitizeForEmail, formatDateForEmail, getAdminEmail } from '@/lib/email-service';
 import { EmailTemplates } from '@/lib/email-templates-professional';
 
-async function forwardToGetform(data: { name: string; email: string; subject?: string; message: string; formType: string; }) {
-  const getformEndpoint = process.env.GETFORM_ENDPOINT?.trim();
-  if (!getformEndpoint) {
-    console.warn('[FORM SUBMISSION] GETFORM_ENDPOINT is not configured; skipping Getform forwarding.');
-    return null;
-  }
-
-  try {
-    const formPayload = new URLSearchParams();
-    formPayload.append('name', data.name);
-    formPayload.append('email', data.email);
-    if (data.subject) formPayload.append('subject', data.subject);
-    formPayload.append('message', data.message);
-    formPayload.append('formType', data.formType);
-
-    const response = await fetch(getformEndpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: formPayload,
-    });
-
-    const responseBody = await response.text();
-    if (!response.ok) {
-      throw new Error(`Getform response ${response.status}: ${responseBody}`);
-    }
-
-    return { success: true, status: response.status, body: responseBody };
-  } catch (error: any) {
-    console.error('[FORM SUBMISSION] Getform forward failed:', error);
-    return { success: false, error: error?.message || 'Unknown Getform error' };
-  }
-}
-
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -80,15 +45,25 @@ export async function POST(request: NextRequest) {
     }
 
     // ===== SANITIZE INPUT =====
-    const sanitizedData = {
+    const sanitizedData: {
+      name: string;
+      email: string;
+      phone?: string;
+      subject: string;
+      message: string;
+      vehicleType?: string;
+      vin?: string;
+      formType: 'contact' | 'get-report' | 'review';
+      submittedAt: string;
+    } = {
       name: sanitizeForEmail(name.substring(0, 100)),
       email: email.toLowerCase().trim(),
       phone: phone ? sanitizeForEmail(phone.substring(0, 20)) : undefined,
-      subject: subject ? sanitizeForEmail(subject.substring(0, 200)) : undefined,
+      subject: sanitizeForEmail((subject || '').substring(0, 200)),
       message: sanitizeForEmail(message.substring(0, 5000)),
       vehicleType: vehicleType ? sanitizeForEmail(vehicleType.substring(0, 50)) : undefined,
       vin: vin ? sanitizeForEmail(vin.substring(0, 17)) : undefined,
-      formType,
+      formType: formType as 'contact' | 'get-report' | 'review',
       submittedAt: formatDateForEmail(new Date()),
     };
 
@@ -116,12 +91,6 @@ export async function POST(request: NextRequest) {
           },
           { status: 500 }
         );
-      }
-
-      // ===== FORWARD TO GETFORM =====
-      const getformResult = await forwardToGetform(sanitizedData);
-      if (getformResult && !getformResult.success) {
-        console.warn('[FORM SUBMISSION] Getform forwarding failed:', getformResult.error);
       }
 
       // ===== SEND CONFIRMATION TO CUSTOMER =====

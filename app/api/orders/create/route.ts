@@ -1,57 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { insertOrder } from '@/lib/database'
 
-async function forwardOrderToGetform(data: {
-  customer_email: string
-  vehicle_type: string
-  identification_type: string
-  identification_value: string
-  package_type: string
-  country_code?: string
-  currency?: string
-  amount: number
-}) {
-  const getformEndpoint = process.env.GETFORM_ENDPOINT?.trim()
-  if (!getformEndpoint) {
-    console.warn('[ORDER CREATE] GETFORM_ENDPOINT is not configured; skipping Getform forwarding.')
-    return null
-  }
-
-  try {
-    const payload = new URLSearchParams()
-    payload.append('name', 'Get Report Request')
-    payload.append('email', data.customer_email)
-    payload.append('subject', `Report request: ${data.package_type}`)
-    payload.append('message', `Vehicle type: ${data.vehicle_type}\nIdentification type: ${data.identification_type}\nIdentification value: ${data.identification_value}\nPackage: ${data.package_type}\nCountry: ${data.country_code || 'US'}\nCurrency: ${data.currency || 'USD'}\nAmount: ${data.amount}`)
-    payload.append('formType', 'get-report')
-    payload.append('package_type', data.package_type)
-    payload.append('vehicle_type', data.vehicle_type)
-    payload.append('identification_type', data.identification_type)
-    payload.append('identification_value', data.identification_value)
-    payload.append('country_code', data.country_code || 'US')
-    payload.append('currency', data.currency || 'USD')
-    payload.append('amount', String(data.amount))
-
-    const response = await fetch(getformEndpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: payload,
-    })
-
-    const responseBody = await response.text()
-    if (!response.ok) {
-      throw new Error(`Getform response ${response.status}: ${responseBody}`)
-    }
-
-    return { success: true, body: responseBody }
-  } catch (error: any) {
-    console.error('[ORDER CREATE] Getform forwarding failed:', error)
-    return { success: false, error: error?.message || 'Unknown Getform error' }
-  }
-}
-
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
@@ -120,24 +69,6 @@ export async function POST(request: NextRequest) {
         { error: 'Order created but no ID returned: ' + JSON.stringify(order) },
         { status: 500 }
       )
-    }
-
-    try {
-      const getformResult = await forwardOrderToGetform({
-        customer_email,
-        vehicle_type,
-        identification_type,
-        identification_value,
-        package_type,
-        country_code,
-        currency,
-        amount: Number(amount),
-      })
-      if (getformResult && getformResult.success) {
-        console.log('[ORDER CREATE] Forwarded report request to Getform successfully')
-      }
-    } catch (forwardError) {
-      console.warn('[ORDER CREATE] Getform forwarding exception:', forwardError)
     }
 
     try {
